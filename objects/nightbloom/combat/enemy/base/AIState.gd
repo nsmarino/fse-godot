@@ -1,9 +1,12 @@
-extends Node
+extends BaseAIState
 class_name AIState
 
-@export var state_name: String
-@export var animation: String
+## State for combat enemies
+## Extends BaseAIState with combat-specific helpers and references
 
+@export var animation: String = ""
+
+# Combat-specific references (set by BaseEnemy)
 var player: CharacterBody3D
 var character: CharacterBody3D
 var animator: AnimationPlayer
@@ -13,56 +16,26 @@ var attack_area: Area3D
 var enemy_data: EnemyData
 var enemy_manager: Node
 
-var enter_state_time: float
 
+#region Lifecycle Overrides
 
-func check_transition(_delta: float) -> Array:
-	return [false, ""]
-
-
-func update(_delta: float) -> void:
-	pass
- 
-
+## Override on_enter to emit combat event
 func on_enter() -> void:
 	Events.enemy_state_changed.emit(character, state_name)
 
-
-func on_exit() -> void:
-	pass
+#endregion
 
 
-# Timestamps framework for timing logic
-func mark_enter_state() -> void:
-	enter_state_time = Time.get_unix_time_from_system()
+#region Combat Helper Methods
 
-
-func get_progress() -> float:
-	var now: float = Time.get_unix_time_from_system()
-	return now - enter_state_time
-
-
-func duration_longer_than(time: float) -> bool:
-	return get_progress() >= time
-
-
-func duration_less_than(time: float) -> bool:
-	return get_progress() < time
-
-
-func duration_between(start: float, finish: float) -> bool:
-	var progress: float = get_progress()
-	return progress >= start and progress <= finish
-
-
-# Helper: get distance to player
+## Get distance to the player
 func get_distance_to_player() -> float:
 	if player:
 		return character.global_position.distance_to(player.global_position)
 	return 999.0
 
 
-# Helper: move toward target position using navigation (with avoidance)
+## Navigate toward a target position using navigation (with avoidance)
 func navigate_to(target: Vector3, speed: float, delta: float) -> void:
 	# Project target to ground level (navmesh is typically at Y=0)
 	var ground_target: Vector3 = Vector3(target.x, character.global_position.y, target.z)
@@ -128,7 +101,7 @@ func navigate_to(target: Vector3, speed: float, delta: float) -> void:
 	move_with_avoidance(desired_velocity)
 
 
-# Helper: move away from target position (with avoidance)
+## Move away from a target position (with avoidance)
 func move_away_from(target: Vector3, speed: float, delta: float) -> void:
 	var direction: Vector3 = (character.global_position - target).normalized()
 	direction.y = 0
@@ -146,7 +119,7 @@ func move_away_from(target: Vector3, speed: float, delta: float) -> void:
 	move_with_avoidance(desired_velocity)
 
 
-# Helper: face the player
+## Face the player
 func face_player(delta: float) -> void:
 	if player:
 		var direction: Vector3 = (player.global_position - character.global_position).normalized()
@@ -156,9 +129,9 @@ func face_player(delta: float) -> void:
 			character.rotation.y = lerp_angle(character.rotation.y, target_rotation, delta * 10.0)
 
 
-# Helper: move with avoidance (uses NavigationAgent3D's RVO avoidance)
-# This sets the desired velocity and lets the avoidance system compute a safe velocity
-# The actual movement happens in BaseEnemy._on_velocity_computed()
+## Move with avoidance (uses NavigationAgent3D's RVO avoidance)
+## Sets the desired velocity and lets the avoidance system compute a safe velocity
+## The actual movement happens in BaseEnemy._on_velocity_computed()
 func move_with_avoidance(desired_velocity: Vector3) -> void:
 	if nav_agent and nav_agent.avoidance_enabled:
 		nav_agent.set_velocity(desired_velocity)
@@ -168,10 +141,12 @@ func move_with_avoidance(desired_velocity: Vector3) -> void:
 		character.move_and_slide()
 
 
-# Helper: stop with avoidance (still participates in avoidance calculations)
+## Stop with avoidance (still participates in avoidance calculations)
 func stop_with_avoidance() -> void:
 	if nav_agent and nav_agent.avoidance_enabled:
 		nav_agent.set_velocity(Vector3.ZERO)
 	else:
 		character.velocity = Vector3.ZERO
 		character.move_and_slide()
+
+#endregion
