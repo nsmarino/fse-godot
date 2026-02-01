@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://ct85gx5gbjaso"]
+
+[ext_resource type="PackedScene" uid="uid://dyj8ajh7qbh5c" path="res://objects/nightbloom/overworld/triggers/BaseTrigger.tscn" id="1_slj7v"]
+
+[node name="BaseTrigger" unique_id=756638082 instance=ExtResource("1_slj7v")]

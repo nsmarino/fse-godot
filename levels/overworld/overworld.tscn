@@ -8,11 +8,20 @@ size = Vector3(40, 1, 40)
 
 [node name="Overworld" type="Node3D" unique_id=1089087201]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=975197426]
+[node name="Ground" type="Node" parent="." unique_id=408931436]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=975197426]
 mesh = SubResource("PlaneMesh_jptb8")
+skeleton = NodePath("../..")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1062585021]
+[node name="StaticBody3D" type="StaticBody3D" parent="Ground" unique_id=1062585021]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=737131201]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D" unique_id=737131201]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_gfxx5")
+
+[node name="Decoration" type="Node" parent="." unique_id=1856826208]
+
+[node name="Interactive" type="Node" parent="." unique_id=1566007902]
+
+[node name="ArenaTriggers" type="Node" parent="Interactive" unique_id=561014453]
