@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://xfjfxk0ojb5c"]
 
+[ext_resource type="PackedScene" uid="uid://c5u0q4ta36o0y" path="res://objects/nightbloom/overworld/triggers/arena/ProtoArenaTrigger.tscn" id="1_gfxx5"]
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_jptb8"]
 size = Vector2(40, 40)
 
@@ -8,7 +10,7 @@ size = Vector3(40, 1, 40)
 
 [node name="Overworld" type="Node3D" unique_id=1089087201]
 
-[node name="Ground" type="Node" parent="." unique_id=408931436]
+[node name="Ground" type="Node3D" parent="." unique_id=865474664]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=975197426]
 mesh = SubResource("PlaneMesh_jptb8")
@@ -20,8 +22,13 @@ skeleton = NodePath("../..")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_gfxx5")
 
-[node name="Decoration" type="Node" parent="." unique_id=1856826208]
+[node name="Decoration" type="Node3D" parent="." unique_id=2107315747]
 
-[node name="Interactive" type="Node" parent="." unique_id=1566007902]
+[node name="Interactive" type="Node3D" parent="." unique_id=498288437]
 
-[node name="ArenaTriggers" type="Node" parent="Interactive" unique_id=561014453]
+[node name="ArenaTriggers" type="Node3D" parent="Interactive" unique_id=695524052]
+
+[node name="ProtoArenaTrigger" parent="Interactive/ArenaTriggers" unique_id=1429759089 instance=ExtResource("1_gfxx5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -1)
+
+[editable path="Interactive/ArenaTriggers/ProtoArenaTrigger"]

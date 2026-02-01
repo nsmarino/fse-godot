@@ -12,14 +12,21 @@ enum GameState {
 # Current game state
 var current_state: GameState = GameState.OVERWORLD
 
-# Scene references
+# Scene references (registered by main scene)
 var navigator: CharacterBody3D = null
 var arena_container: Node = null
+var overworld_root: Node = null
+var overworld_lighting: Node = null
+
+# Current arena instance
 var current_arena: Node3D = null
 
-# Stored navigator state for returning from combat
-var stored_navigator_position: Vector3 = Vector3.ZERO
-var stored_navigator_rotation: Vector3 = Vector3.ZERO
+# Stored state for scene tree removal/restoration
+var _navigator_parent: Node = null
+var _overworld_parent: Node = null
+var _lighting_parent: Node = null
+var _stored_navigator_position: Vector3 = Vector3.ZERO
+var _stored_navigator_rotation: Vector3 = Vector3.ZERO
 
 # Arena scene to instantiate
 const ARENA_SCENE_PATH: String = "res://levels/combat/arena.tscn"
@@ -48,6 +55,18 @@ func register_arena_container(container: Node) -> void:
 	print("[GameManager] Arena container registered: %s" % container.name)
 
 
+## Register the overworld root node (will be hidden during combat)
+func register_overworld(overworld: Node) -> void:
+	overworld_root = overworld
+	print("[GameManager] Overworld registered: %s" % overworld.name)
+
+
+## Register the overworld lighting (will be hidden during combat)
+func register_overworld_lighting(lighting: Node) -> void:
+	overworld_lighting = lighting
+	print("[GameManager] Overworld lighting registered: %s" % lighting.name)
+
+
 ## Start a combat encounter with the given arena configuration
 func start_combat(config: ArenaConfig) -> void:
 	if current_state != GameState.OVERWORLD:
@@ -65,18 +84,18 @@ func start_combat(config: ArenaConfig) -> void:
 	print("[GameManager] === STARTING COMBAT ===")
 	current_state = GameState.TRANSITIONING
 	
-	# Store navigator state
+	# Store navigator state before removal
 	_store_navigator_state()
 	
-	# Disable navigator
-	_disable_navigator()
+	# Remove navigator from scene tree (disables all processing, physics, collisions)
+	_remove_navigator_from_tree()
 	
-	# Instantiate and configure arena
-	_spawn_arena(config)
+	# Remove overworld from scene tree (disables all processing, physics, collisions)
+	_remove_overworld_from_tree()
 	
-	# Transition to combat state
-	current_state = GameState.COMBAT
-	print("[GameManager] Combat started - state: COMBAT")
+	# Defer arena spawn to ensure removals complete first
+	call_deferred("_spawn_arena", config)
+	call_deferred("_finalize_combat_start")
 
 
 ## Called when combat ends (victory or defeat)
@@ -102,38 +121,34 @@ func _on_combat_ended(player_won: bool) -> void:
 
 func _store_navigator_state() -> void:
 	if navigator:
-		stored_navigator_position = navigator.global_position
-		stored_navigator_rotation = navigator.rotation
-		print("[GameManager] Stored navigator position: %s" % stored_navigator_position)
+		_stored_navigator_position = navigator.global_position
+		_stored_navigator_rotation = navigator.rotation
+		print("[GameManager] Stored navigator position: %s" % _stored_navigator_position)
 
 
-func _disable_navigator() -> void:
-	if navigator:
-		# Disable processing and hide
-		navigator.set_physics_process(false)
-		navigator.set_process(false)
-		navigator.set_process_input(false)
-		navigator.visible = false
+func _remove_navigator_from_tree() -> void:
+	if navigator and navigator.get_parent():
+		# Store parent reference for restoration
+		_navigator_parent = navigator.get_parent()
 		
-		# Disable the navigator's camera
+		# Disable camera before removal
 		var camera: Camera3D = navigator.get_node_or_null("SpringArm3D/Camera3D")
 		if camera:
 			camera.current = false
 		
-		print("[GameManager] Navigator disabled")
+		# Remove from tree using call_deferred to avoid physics callback issues
+		_navigator_parent.call_deferred("remove_child", navigator)
+		print("[GameManager] Navigator removal deferred")
 
 
-func _enable_navigator() -> void:
-	if navigator:
-		# Restore position
-		navigator.global_position = stored_navigator_position
-		navigator.rotation = stored_navigator_rotation
+func _restore_navigator_to_tree() -> void:
+	if navigator and _navigator_parent:
+		# Re-add to tree
+		_navigator_parent.add_child(navigator)
 		
-		# Re-enable processing
-		navigator.set_physics_process(true)
-		navigator.set_process(true)
-		navigator.set_process_input(true)
-		navigator.visible = true
+		# Restore position
+		navigator.global_position = _stored_navigator_position
+		navigator.rotation = _stored_navigator_rotation
 		
 		# Re-enable the navigator's camera
 		var camera: Camera3D = navigator.get_node_or_null("SpringArm3D/Camera3D")
@@ -143,7 +158,35 @@ func _enable_navigator() -> void:
 		# Recapture mouse for navigation
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		
-		print("[GameManager] Navigator enabled at: %s" % navigator.global_position)
+		print("[GameManager] Navigator restored to scene tree at: %s" % navigator.global_position)
+
+
+func _remove_overworld_from_tree() -> void:
+	# Remove overworld root (Level node containing overworld)
+	if overworld_root and overworld_root.get_parent():
+		_overworld_parent = overworld_root.get_parent()
+		# Use call_deferred to avoid physics callback issues
+		_overworld_parent.call_deferred("remove_child", overworld_root)
+		print("[GameManager] Overworld removal deferred")
+	
+	# Remove overworld lighting
+	if overworld_lighting and overworld_lighting.get_parent():
+		_lighting_parent = overworld_lighting.get_parent()
+		# Use call_deferred to avoid physics callback issues
+		_lighting_parent.call_deferred("remove_child", overworld_lighting)
+		print("[GameManager] Overworld lighting removal deferred")
+
+
+func _restore_overworld_to_tree() -> void:
+	# Restore overworld root
+	if overworld_root and _overworld_parent:
+		_overworld_parent.add_child(overworld_root)
+		print("[GameManager] Overworld restored to scene tree")
+	
+	# Restore overworld lighting
+	if overworld_lighting and _lighting_parent:
+		_lighting_parent.add_child(overworld_lighting)
+		print("[GameManager] Overworld lighting restored to scene tree")
 
 
 func _spawn_arena(config: ArenaConfig) -> void:
@@ -165,6 +208,11 @@ func _spawn_arena(config: ArenaConfig) -> void:
 	print("[GameManager] Arena spawned and configured")
 
 
+func _finalize_combat_start() -> void:
+	current_state = GameState.COMBAT
+	print("[GameManager] Combat started - state: COMBAT")
+
+
 func _cleanup_arena() -> void:
 	if current_arena and is_instance_valid(current_arena):
 		current_arena.queue_free()
@@ -173,7 +221,12 @@ func _cleanup_arena() -> void:
 
 
 func _return_to_overworld() -> void:
-	_enable_navigator()
+	# Restore overworld to scene tree
+	_restore_overworld_to_tree()
+	
+	# Restore navigator to scene tree
+	_restore_navigator_to_tree()
+	
 	current_state = GameState.OVERWORLD
 	print("[GameManager] Returned to overworld - state: OVERWORLD")
 

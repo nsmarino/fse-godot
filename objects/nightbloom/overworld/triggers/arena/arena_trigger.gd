@@ -1,5 +1,4 @@
 extends CharacterBody3D
-class_name ArenaTrigger
 
 ## Arena Trigger - initiates combat when the navigator enters its interaction area
 
