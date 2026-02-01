@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://d0xmk6y2h4wes"]
+
+[ext_resource type="PackedScene" uid="uid://ct85gx5gbjaso" path="res://objects/nightbloom/overworld/triggers/arena/ArenaTrigger.tscn" id="1_trigger"]
+[ext_resource type="Resource" uid="uid://crua4k7j5h6xn" path="res://resources/arena/proto_arena.tres" id="2_config"]
+
+[node name="ProtoArenaTrigger" instance=ExtResource("1_trigger")]
+arena_config = ExtResource("2_config")
+one_shot = true

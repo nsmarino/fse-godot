@@ -10,6 +10,17 @@ class_name EnemyManager
 
 @onready var group_resources: Node = $GroupResources
 
+# Flag to track if configuration was applied before _ready
+var _configured_before_ready: bool = false
+
+
+## Configure enemy type and count at runtime (called by ArenaController)
+func configure(enemy_data: EnemyData, count: int) -> void:
+	EnemyDataResource = enemy_data
+	enemy_count = count
+	_configured_before_ready = true
+	print("[EnemyManager] Configured: %s x%d" % [enemy_data.display_name if enemy_data else "null", count])
+
 var active_enemies: Array[BaseEnemy] = []
 var attack_queue: Array[BaseEnemy] = []  # Randomized order for this turn
 var current_attacker: BaseEnemy = null

@@ -16,13 +16,14 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="Nightbloom v1"
 config/tags=PackedStringArray("game")
-run/main_scene="uid://dhhhxikvujens"
+run/main_scene="uid://dm0ymt1k01748"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 Events="*res://autoloads/events.gd"
+GameManager="*res://autoloads/game_manager.gd"
 
 [debug]
 

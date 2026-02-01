@@ -47,3 +47,5 @@ fov = 10.0
 [node name="HUD" type="Node" parent="." unique_id=1494739639]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="HUD" unique_id=1230928883]
+
+[node name="ArenaContainer" type="Node3D" parent="." unique_id=1983764521]

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ArenaConfig" format=3 uid="uid://crua4k7j5h6xn"]
+
+[ext_resource type="Script" path="res://resources/arena/arena_config.gd" id="1_config"]
+[ext_resource type="Resource" path="res://objects/nightbloom/combat/enemy/enemies/goblin.tres" id="2_enemy"]
+
+[resource]
+script = ExtResource("1_config")
+ground_size = Vector2(40, 40)
+enemy_data = ExtResource("2_enemy")
+enemy_count = 3
+use_custom_lighting = false
+light_color = Color(1, 0.99, 0.87, 1)
+light_energy = 1.0

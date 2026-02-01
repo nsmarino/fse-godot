@@ -1,20 +1,39 @@
 extends Node3D
 
-#@onready var windmill: Node3D = $Level/Ground/Windmill
+## Main scene controller - manages overworld and arena transitions
 
-# Called when the node enters the scene tree for the first time.
+@onready var navigator: CharacterBody3D = $Navigator
+@onready var arena_container: Node = $ArenaContainer
+@onready var overworld: Node3D = $Level/Overworld
+
+
 func _ready() -> void:
 	Events.player_killed.connect(_on_player_killed)
-	#_start_windmill_animation()
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
-func _unhandled_input(event: InputEvent) -> void:
-	pass
 	
+	# Register references with GameManager
+	_register_with_game_manager()
+
+
+func _register_with_game_manager() -> void:
+	# Wait a frame to ensure GameManager autoload is ready
+	await get_tree().process_frame
+	
+	if GameManager:
+		GameManager.register_navigator(navigator)
+		GameManager.register_arena_container(arena_container)
+		print("[Main] Registered navigator and arena container with GameManager")
+	else:
+		push_error("[Main] GameManager autoload not found!")
+
+
+func _process(_delta: float) -> void:
+	pass
+
+
+func _unhandled_input(_event: InputEvent) -> void:
+	pass
+
+
 func _on_player_killed() -> void:
 	get_tree().quit()
 

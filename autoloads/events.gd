@@ -51,5 +51,9 @@ signal player_off_balance_changed(is_off_balance: bool)
 # Party member signals
 signal active_party_member_changed(member_index: int)
 
+# Overworld/Combat transition signals
+signal combat_requested(arena_config: Resource)  ## Request to start combat with given config
+signal returning_to_overworld(player_won: bool)  ## Combat ended, returning to overworld
+
 func _ready() -> void:
 	print("Init autoload events")
