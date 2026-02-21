@@ -1,14 +1,25 @@
 [gd_scene format=3 uid="uid://dm0ymt1k01748"]
 
 [ext_resource type="Script" uid="uid://b1esvavhc0ixb" path="res://levels/main.gd" id="1_0xm2m"]
-[ext_resource type="PackedScene" uid="uid://cowyb5vnlbv4i" path="res://levels/navigator.tscn" id="2_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://cowyb5vnlbv4i" path="res://objects/nightbloom/overworld/player/navigator.tscn" id="2_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://xfjfxk0ojb5c" path="res://levels/overworld/overworld.tscn" id="3_m1504"]
-[ext_resource type="Environment" uid="uid://ddo455a1peyhr" path="res://levels/main-environment.tres" id="3_sugp2"]
+[ext_resource type="PackedScene" uid="uid://berelaj5pim84" path="res://models/character/player/party/june.glb" id="5_ifaiv"]
+[ext_resource type="PackedScene" uid="uid://ids10h4i8ju6" path="res://models/character/player/party/asa.glb" id="6_6et1j"]
+[ext_resource type="PackedScene" uid="uid://dfc7cm2pujtfh" path="res://models/character/player/party/elena.glb" id="7_etqu2"]
+[ext_resource type="PackedScene" uid="uid://c0ofpo6ku7jct" path="res://models/character/player/party/granley.glb" id="8_jw1n3"]
+
+[sub_resource type="Curve3D" id="Curve3D_m1504"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 2, 0, 5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
 
 [node name="Main" type="Node3D" unique_id=1370251571]
 script = ExtResource("1_0xm2m")
 
 [node name="Navigator" parent="." unique_id=1672489611 instance=ExtResource("2_tbgi4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.185119, 0, 0)
 use_gravity = true
 
 [node name="Level" type="Node3D" parent="." unique_id=2134277765]
@@ -18,9 +29,9 @@ use_gravity = true
 [node name="Lighting" type="Node3D" parent="." unique_id=439886739]
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Lighting" unique_id=1068811643]
-transform = Transform3D(0.52776176, -0.8235246, -0.20802619, 0.49217, 0.0968847, 0.8650908, -0.692269, -0.5589461, 0.45644605, -2, 5.7045546, 4.320508)
+transform = Transform3D(0.52776176, -0.8235246, -0.20802619, 0.49217, 0.0968847, 0.8650908, -0.692269, -0.5589461, 0.45644605, -3.3998535, 5.7045546, 2.431312)
 light_color = Color(0.9999997, 0.9774056, 0.63595563, 1)
-light_energy = 16.0
+light_energy = 6.583
 shadow_enabled = true
 spot_range = 10.0
 spot_attenuation = 0.89
@@ -29,22 +40,35 @@ spot_angle_attenuation = 1.6245059
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lighting" unique_id=413199500]
 transform = Transform3D(0.76604444, 0.49240384, -0.4131759, 0, 0.64278764, 0.76604444, 0.6427876, -0.58682406, 0.4924039, 0, 0, 0)
-light_color = Color(0.9999998, 0.9737739, 0.8628186, 1)
-light_energy = 0.9
 shadow_enabled = true
 directional_shadow_fade_start = 0.214
 sky_mode = 1
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2065183461]
-environment = ExtResource("3_sugp2")
-
-[node name="Camera3D" type="Camera3D" parent="." unique_id=713568531]
-transform = Transform3D(1, 0, 0, 0, 0.99939084, 0.034899496, 0, -0.034899496, 0.99939084, 0, 10, 150)
-current = true
-fov = 10.0
 
 [node name="HUD" type="Node" parent="." unique_id=1494739639]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="HUD" unique_id=1230928883]
 
 [node name="ArenaContainer" type="Node3D" parent="." unique_id=1983764521]
+
+[node name="Path3D" type="Path3D" parent="." unique_id=2070942471]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.772179, 0)
+curve = SubResource("Curve3D_m1504")
+debug_custom_color = Color(0.2932296, 0.055563025, 0, 1)
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D" unique_id=84381000]
+transform = Transform3D(0.5729961, 0.4269822, 0.6995136, -0.69951195, 0.6995136, 0.14601628, -0.42698014, -0.57299846, 0.6995136, 2.4154866, 0.7327207, 2.4154866)
+progress = 4.088795
+
+[node name="june" parent="." unique_id=1374272243 instance=ExtResource("5_ifaiv")]
+transform = Transform3D(0.9168513, 0, 0.39922926, 0, 1, 0, -0.39922926, 0, 0.9168513, -3.7963789, 0, -1.5162745)
+
+[node name="asa" parent="." unique_id=166014142 instance=ExtResource("6_6et1j")]
+transform = Transform3D(0.8660254, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660254, 0.5, 0, -1)
+
+[node name="elena" parent="." unique_id=1028785918 instance=ExtResource("7_etqu2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -0.5)
+
+[node name="granley" parent="." unique_id=1736302217 instance=ExtResource("8_jw1n3")]
+transform = Transform3D(0.8998625, 0, -0.43617368, 0, 1, 0, 0.43617368, 0, 0.8998625, -1.1755683, 0, -1.5)

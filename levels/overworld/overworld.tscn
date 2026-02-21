@@ -29,6 +29,6 @@ shape = SubResource("BoxShape3D_gfxx5")
 [node name="ArenaTriggers" type="Node3D" parent="Interactive" unique_id=695524052]
 
 [node name="ProtoArenaTrigger" parent="Interactive/ArenaTriggers" unique_id=1429759089 instance=ExtResource("1_gfxx5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0, -1)
 
 [editable path="Interactive/ArenaTriggers/ProtoArenaTrigger"]
