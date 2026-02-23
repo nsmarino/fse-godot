@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://vxdor5xmvcxb" path="res://objects/nightbloom/combat/hud/CombatHud.tscn" id="3_s8irp"]
 [ext_resource type="PackedScene" uid="uid://g6ifp62rjk87" path="res://objects/nightbloom/combat/enemy/EnemyGroup.tscn" id="5_p17xp"]
 [ext_resource type="Script" uid="uid://be3ojgxjdeih1" path="res://levels/combat/arena_controller.gd" id="6_arena"]
+[ext_resource type="PackedScene" uid="uid://1dod426n4ojw" path="res://levels/combat/arena_sketch.tscn" id="6_t7wc0"]
 [ext_resource type="Script" uid="uid://dcgac1l8pglxk" path="res://levels/combat/follow_camera.gd" id="7_camera"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_65vf4"]
@@ -33,7 +34,7 @@ intro_duration = 1.0
 turn_duration = 30.0
 
 [node name="Pawn" parent="." unique_id=1861920858 instance=ExtResource("2_vb544")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
 
 [node name="FollowCamera" type="Camera3D" parent="Pawn" unique_id=927752189]
 current = true
@@ -64,12 +65,17 @@ shape = SubResource("BoxShape3D_floor")
 
 [node name="FloorMesh" type="MeshInstance3D" parent="Level/Ground/NavigationRegion3D/FloorBody" unique_id=442519145]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.5)
+visible = false
 mesh = SubResource("PlaneMesh_xdvfk")
+
+[node name="ArenaSketch" parent="Level/Ground" unique_id=721246901 instance=ExtResource("6_t7wc0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5)
 
 [node name="Lighting" type="Node" parent="." unique_id=1345912663]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lighting" unique_id=2010568951]
 transform = Transform3D(-0.50000006, -0.4330127, 0.75, -2.1855694e-08, 0.8660254, 0.5, -0.8660254, 0.25, -0.43301272, 0, 0, 0)
+visible = false
 light_color = Color(0.9999998, 0.989737, 0.87402666, 1)
 shadow_enabled = true
 
@@ -85,13 +91,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3813412, 0, 4.875696)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3813412, 0, 7.875696)
 
 [node name="Marker3D4" type="Marker3D" parent="EnemySpawns" unique_id=1774284815]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1186588, 0, 7.875696)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1186588, 0, 7.875696)
 
 [node name="Marker3D5" type="Marker3D" parent="EnemySpawns" unique_id=1793720338]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1186588, 0, 6.875696)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1186588, 0, 5.875696)
 
 [node name="Marker3D6" type="Marker3D" parent="EnemySpawns" unique_id=116993866]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.618659, 0, 6.875696)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.118659, 0, 6.375696)
 
 [node name="Marker3D7" type="Marker3D" parent="EnemySpawns" unique_id=490242433]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.381341, 0, 6.875696)

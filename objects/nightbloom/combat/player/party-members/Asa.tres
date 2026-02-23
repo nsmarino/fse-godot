@@ -18,7 +18,6 @@ metadata/_custom_type_script = "uid://cmaxr3mmur56t"
 [sub_resource type="Resource" id="Resource_4adyi"]
 script = ExtResource("4_cpu2g")
 name = "Fire Spell"
-animation = "Spell"
 metadata/_custom_type_script = "uid://cttr2bvqc6o83"
 
 [resource]

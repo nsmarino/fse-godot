@@ -20,6 +20,7 @@ extends CharacterBody3D
 # Camera spring arm - add as child of this CharacterBody3D
 @onready var spring_arm: SpringArm3D = $SpringArm3D
 @onready var camera: Camera3D = $SpringArm3D/Camera3D
+@onready var elena: Node3D = $elena  # Player model - faces camera when moving
 
 var camera_rotation := Vector2.ZERO  # x = yaw, y = pitch
 var pitch_limit := deg_to_rad(89.0)
@@ -54,6 +55,7 @@ func _physics_process(delta: float) -> void:
 		_process_fly_movement(delta)
 	
 	move_and_slide()
+	_update_elena_facing()
 
 
 func _handle_camera_input(delta: float) -> void:
@@ -128,3 +130,16 @@ func _process_gravity_movement(delta: float) -> void:
 	
 	velocity.x = lerp(velocity.x, target_velocity_x, control)
 	velocity.z = lerp(velocity.z, target_velocity_z, control)
+
+
+func _update_elena_facing() -> void:
+	# Rotate player model to face movement direction only when in motion
+	var horizontal_speed := Vector2(velocity.x, velocity.z).length()
+	if horizontal_speed < 0.5:
+		return
+
+	var move_dir := Vector3(velocity.x, 0, velocity.z).normalized()
+	if move_dir.length_squared() < 0.01:
+		return
+
+	elena.rotation.y = atan2(move_dir.x, move_dir.z)

@@ -1,26 +1,16 @@
 [gd_scene format=3 uid="uid://xfjfxk0ojb5c"]
 
 [ext_resource type="PackedScene" uid="uid://c5u0q4ta36o0y" path="res://objects/nightbloom/overworld/triggers/arena/ProtoArenaTrigger.tscn" id="1_gfxx5"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_jptb8"]
-size = Vector2(40, 40)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_gfxx5"]
-size = Vector3(40, 1, 40)
+[ext_resource type="PackedScene" uid="uid://4vaijyti2dm" path="res://models/level/overworld/Overworld1.glb" id="1_umo1d"]
 
 [node name="Overworld" type="Node3D" unique_id=1089087201]
 
 [node name="Ground" type="Node3D" parent="." unique_id=865474664]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=975197426]
-mesh = SubResource("PlaneMesh_jptb8")
-skeleton = NodePath("../..")
+[node name="Overworld1" parent="Ground" unique_id=847226644 instance=ExtResource("1_umo1d")]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Ground" unique_id=1062585021]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D" unique_id=737131201]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-shape = SubResource("BoxShape3D_gfxx5")
+[node name="StaticBody3D" parent="Ground/Overworld1/Overworld" parent_id_path=PackedInt32Array(847226644, 202237970) index="0" unique_id=1559073709]
+collision_layer = 3
 
 [node name="Decoration" type="Node3D" parent="." unique_id=2107315747]
 
@@ -29,6 +19,7 @@ shape = SubResource("BoxShape3D_gfxx5")
 [node name="ArenaTriggers" type="Node3D" parent="Interactive" unique_id=695524052]
 
 [node name="ProtoArenaTrigger" parent="Interactive/ArenaTriggers" unique_id=1429759089 instance=ExtResource("1_gfxx5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, 7)
 
+[editable path="Ground/Overworld1"]
 [editable path="Interactive/ArenaTriggers/ProtoArenaTrigger"]
