@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://xfjfxk0ojb5c"]
 
 [ext_resource type="PackedScene" uid="uid://c5u0q4ta36o0y" path="res://objects/nightbloom/overworld/triggers/arena/ProtoArenaTrigger.tscn" id="1_gfxx5"]
+[ext_resource type="PackedScene" path="res://objects/nightbloom/overworld/triggers/dialogue/ProtoDialogueTrigger.tscn" id="2_dialogue"]
 [ext_resource type="PackedScene" uid="uid://docj2g3ana3bu" path="res://models/level/overworld/basis-1.glb" id="2_hkyut"]
 [ext_resource type="PackedScene" uid="uid://b4ijqs6s483yo" path="res://models/level/overworld/blockout-1.glb" id="2_t0r04"]
 
@@ -26,5 +27,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0, -27)
 
 [node name="DialogueTriggers" type="Node3D" parent="Interactive" unique_id=1996927852]
 
+[node name="ProtoDialogueTrigger" parent="Interactive/DialogueTriggers" unique_id=2136767709 instance=ExtResource("2_dialogue")]
+transform = Transform3D(0.99938846, 0, 0.034966666, 0, 1, 0, -0.034966666, 0, 0.99938846, -5.638176, 0, -11.99979)
+
 [editable path="Ground/Overworld"]
 [editable path="Interactive/ArenaTriggers/ProtoArenaTrigger"]
+[editable path="Interactive/DialogueTriggers/ProtoDialogueTrigger"]

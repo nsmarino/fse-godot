@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://cowyb5vnlbv4i" path="res://objects/nightbloom/overworld/player/navigator.tscn" id="2_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://xfjfxk0ojb5c" path="res://levels/overworld/overworld.tscn" id="3_m1504"]
 [ext_resource type="Texture2D" uid="uid://wvk4w6lot138" path="res://hdr/kloppenheim_07_puresky_1k.hdr" id="4_m1504"]
+[ext_resource type="PackedScene" uid="uid://qs2cdhultq7o" path="res://ui/overworld/DialogueBox.tscn" id="5_5k4jt"]
+[ext_resource type="PackedScene" uid="uid://dbubdssx6nydw" path="res://ui/overworld/PromptBox.tscn" id="6_qy63d"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_21ko3"]
 panorama = ExtResource("4_m1504")
@@ -76,6 +78,10 @@ environment = SubResource("Environment_qy63d")
 [node name="HUD" type="Node" parent="." unique_id=1494739639]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="HUD" unique_id=1230928883]
+
+[node name="DialogueBox" parent="HUD/CanvasLayer" unique_id=1878604976 instance=ExtResource("5_5k4jt")]
+
+[node name="PromptBox" parent="HUD/CanvasLayer" unique_id=597706640 instance=ExtResource("6_qy63d")]
 
 [node name="ArenaContainer" type="Node3D" parent="." unique_id=1983764521]
 

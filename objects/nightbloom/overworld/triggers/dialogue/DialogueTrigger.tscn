@@ -3,5 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://dyj8ajh7qbh5c" path="res://objects/nightbloom/overworld/triggers/BaseTrigger.tscn" id="1_ooavb"]
 [ext_resource type="Script" uid="uid://65tmk4xqr0od" path="res://objects/nightbloom/overworld/triggers/dialogue/dialogue_trigger.gd" id="2_4q6b7"]
 
-[node name="BaseTrigger" unique_id=756638082 instance=ExtResource("1_ooavb")]
+[node name="DialogueTrigger" unique_id=756638082 instance=ExtResource("1_ooavb")]
 script = ExtResource("2_4q6b7")
+
+[node name="OverworldMesh" type="MeshInstance3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

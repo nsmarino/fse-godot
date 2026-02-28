@@ -55,5 +55,61 @@ signal active_party_member_changed(member_index: int)
 signal combat_requested(arena_config: Resource)  ## Request to start combat with given config
 signal returning_to_overworld(player_won: bool)  ## Combat ended, returning to overworld
 
+# Overworld dialogue signals
+signal dialogue_prompt_requested(content: String)
+signal dialogue_prompt_cleared
+signal dialogue_started(dialogue_config: DialogueConfig)
+signal dialogue_trigger_fired(trigger_id: String)
+signal dialogue_ended
+
+var active_dialogue_trigger: Node = null
+var is_dialogue_active: bool = false
+
 func _ready() -> void:
 	print("Init autoload events")
+
+
+func request_dialogue_prompt(trigger: Node, content: String) -> void:
+	if is_dialogue_active:
+		return
+	active_dialogue_trigger = trigger
+	dialogue_prompt_requested.emit(content)
+
+
+func clear_dialogue_prompt(trigger: Node) -> void:
+	if active_dialogue_trigger != trigger:
+		return
+	active_dialogue_trigger = null
+	dialogue_prompt_cleared.emit()
+
+
+func can_start_dialogue(trigger: Node) -> bool:
+	return not is_dialogue_active and active_dialogue_trigger == trigger
+
+
+func begin_dialogue(trigger: Node, dialogue_config: DialogueConfig) -> bool:
+	if not can_start_dialogue(trigger):
+		return false
+	if not dialogue_config:
+		return false
+	
+	is_dialogue_active = true
+	active_dialogue_trigger = trigger
+	dialogue_prompt_cleared.emit()
+	dialogue_started.emit(dialogue_config)
+	return true
+
+
+func emit_dialogue_trigger(trigger_id: String) -> void:
+	if trigger_id.is_empty():
+		return
+	dialogue_trigger_fired.emit(trigger_id)
+
+
+func end_dialogue(trigger: Node = null) -> void:
+	if trigger and active_dialogue_trigger != trigger:
+		return
+	
+	is_dialogue_active = false
+	active_dialogue_trigger = null
+	dialogue_ended.emit()

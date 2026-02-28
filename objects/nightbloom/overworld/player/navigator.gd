@@ -75,6 +75,9 @@ func _handle_camera_input(delta: float) -> void:
 
 
 func _get_movement_direction() -> Vector3:
+	if _is_dialogue_locked():
+		return Vector3.ZERO
+	
 	# Movement input (left stick / WASD)
 	var input_dir := Vector2.ZERO
 	input_dir.x = Input.get_axis("MoveLeft", "MoveRight")
@@ -103,7 +106,7 @@ func _get_movement_direction() -> Vector3:
 
 func _process_fly_movement(_delta: float) -> void:
 	var move_dir := _get_movement_direction()
-	var vertical_input := Input.get_axis("FlyDown", "FlyUp")
+	var vertical_input := 0.0 if _is_dialogue_locked() else Input.get_axis("FlyDown", "FlyUp")
 	
 	velocity.x = move_dir.x * move_speed
 	velocity.z = move_dir.z * move_speed
@@ -119,7 +122,9 @@ func _process_gravity_movement(delta: float) -> void:
 		velocity.y -= gravity_strength * delta
 	
 	# Jump (use FlyUp action or Jump action)
-	var wants_jump := Input.is_action_just_pressed("FlyUp") or Input.is_action_just_pressed("Jump")
+	var wants_jump := false
+	if not _is_dialogue_locked():
+		wants_jump = Input.is_action_just_pressed("FlyUp") or Input.is_action_just_pressed("Jump")
 	if wants_jump and on_floor:
 		velocity.y = jump_velocity
 	
@@ -143,3 +148,7 @@ func _update_elena_facing() -> void:
 		return
 
 	elena.rotation.y = atan2(move_dir.x, move_dir.z)
+
+
+func _is_dialogue_locked() -> bool:
+	return Events and Events.is_dialogue_active
