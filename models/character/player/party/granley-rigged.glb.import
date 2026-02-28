@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://uq028cm80jk1"
-path="res://.godot/imported/elena-rigged.glb-1b779f8fde4432cab4646008d9480142.scn"
+uid="uid://2ggoi5df2iii"
+path="res://.godot/imported/granley-rigged.glb-c9c993145805a62ead2ef2fcfc78ef64.scn"
 
 [deps]
 
-source_file="res://models/character/player/party/elena-rigged.glb"
-dest_files=["res://.godot/imported/elena-rigged.glb-1b779f8fde4432cab4646008d9480142.scn"]
+source_file="res://models/character/player/party/granley-rigged.glb"
+dest_files=["res://.godot/imported/granley-rigged.glb-c9c993145805a62ead2ef2fcfc78ef64.scn"]
 
 [params]
 

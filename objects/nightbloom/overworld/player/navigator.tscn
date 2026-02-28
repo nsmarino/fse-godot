@@ -14,7 +14,7 @@
 
 [node name="Navigator" type="CharacterBody3D" unique_id=1335866884]
 script = ExtResource("1_m88ny")
-move_speed = 3.0
+move_speed = 6.75
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1222655305]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -26,7 +26,7 @@ visible = false
 mesh = SubResource("CapsuleMesh_tefeu")
 
 [node name="SpringArm3D" type="SpringArm3D" parent="." unique_id=848395057]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 collision_mask = 2
 shape = SubResource("SphereShape3D_m88ny")
 spring_length = 20.0
@@ -37,7 +37,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 current = true
 fov = 30.0
 
-[node name="elena" parent="." unique_id=1806977642 instance=ExtResource("2_sdvag")]
+[node name="elena" parent="." unique_id=1203967877 instance=ExtResource("2_sdvag")]
 
 [node name="StateMachine" type="Node" parent="." unique_id=2124590299 node_paths=PackedStringArray("owner_node")]
 script = ExtResource("3_state_machine")

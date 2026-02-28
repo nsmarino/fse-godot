@@ -13,9 +13,9 @@ func _init() -> void:
 
 func on_enter() -> void:
 	if animator:
-		animator.play("Walk")
+		animator.play("Run")
 		if Engine.is_editor_hint() == false:
-			print("[LocomotionState] on_enter: playing Walk animation (animator=%s)" % (animator != null))
+			print("[LocomotionState] on_enter: playing Run animation (animator=%s)" % (animator != null))
 	else:
 		if Engine.is_editor_hint() == false:
 			print("[LocomotionState] on_enter: no animator, cannot play Walk")

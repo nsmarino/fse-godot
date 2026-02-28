@@ -1,16 +1,19 @@
 [gd_scene format=3 uid="uid://xfjfxk0ojb5c"]
 
 [ext_resource type="PackedScene" uid="uid://c5u0q4ta36o0y" path="res://objects/nightbloom/overworld/triggers/arena/ProtoArenaTrigger.tscn" id="1_gfxx5"]
-[ext_resource type="PackedScene" uid="uid://4vaijyti2dm" path="res://models/level/overworld/Overworld1.glb" id="1_umo1d"]
+[ext_resource type="PackedScene" uid="uid://docj2g3ana3bu" path="res://models/level/overworld/basis-1.glb" id="2_hkyut"]
+[ext_resource type="PackedScene" uid="uid://b4ijqs6s483yo" path="res://models/level/overworld/blockout-1.glb" id="2_t0r04"]
 
 [node name="Overworld" type="Node3D" unique_id=1089087201]
 
 [node name="Ground" type="Node3D" parent="." unique_id=865474664]
 
-[node name="Overworld1" parent="Ground" unique_id=847226644 instance=ExtResource("1_umo1d")]
+[node name="Overworld" parent="Ground" unique_id=990757761 instance=ExtResource("2_hkyut")]
 
-[node name="StaticBody3D" parent="Ground/Overworld1/Overworld" parent_id_path=PackedInt32Array(847226644, 202237970) index="0" unique_id=1559073709]
+[node name="StaticBody3D" parent="Ground/Overworld/Basis" parent_id_path=PackedInt32Array(990757761, 1732112910) index="0" unique_id=1165476374]
 collision_layer = 3
+
+[node name="Overworld" parent="Ground/Overworld" unique_id=680479981 instance=ExtResource("2_t0r04")]
 
 [node name="Decoration" type="Node3D" parent="." unique_id=2107315747]
 
@@ -19,7 +22,9 @@ collision_layer = 3
 [node name="ArenaTriggers" type="Node3D" parent="Interactive" unique_id=695524052]
 
 [node name="ProtoArenaTrigger" parent="Interactive/ArenaTriggers" unique_id=1429759089 instance=ExtResource("1_gfxx5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, 7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0, -27)
 
-[editable path="Ground/Overworld1"]
+[node name="DialogueTriggers" type="Node3D" parent="Interactive" unique_id=1996927852]
+
+[editable path="Ground/Overworld"]
 [editable path="Interactive/ArenaTriggers/ProtoArenaTrigger"]
