@@ -15,9 +15,11 @@ sky_material = SubResource("PanoramaSkyMaterial_21ko3")
 
 [sub_resource type="Environment" id="Environment_qy63d"]
 background_mode = 2
+background_energy_multiplier = 0.5
 sky = SubResource("Sky_s07ge")
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_sky_contribution = 0.0
+ambient_light_energy = 0.5
 fog_mode = 1
 fog_light_color = Color(0.692455, 0.72117245, 0.76584524, 1)
 fog_density = 1.0
@@ -38,7 +40,7 @@ point_count = 2
 script = ExtResource("1_0xm2m")
 
 [node name="Navigator" parent="." unique_id=1672489611 instance=ExtResource("2_tbgi4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.101431)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2, -1, -2.5)
 use_gravity = true
 
 [node name="Level" type="Node3D" parent="." unique_id=2134277765]
@@ -47,17 +49,26 @@ use_gravity = true
 
 [node name="Lighting" type="Node3D" parent="." unique_id=439886739]
 
-[node name="SpotLight3D" type="SpotLight3D" parent="Lighting" unique_id=1068811643]
-transform = Transform3D(0.52776176, -0.8235246, -0.20802619, 0.49217, 0.0968847, 0.8650908, -0.692269, -0.5589461, 0.45644605, -3.3998535, 10.710297, 2.431312)
-visible = false
-shadow_enabled = true
-spot_range = 718.706
-spot_angle = 76.1
-spot_angle_attenuation = 0.23325834
-
 [node name="SpotLight3D2" type="SpotLight3D" parent="Lighting" unique_id=63902685]
 transform = Transform3D(0.52776176, -0.8235246, -0.20802619, 0.49217, 0.0968847, 0.8650908, -0.692269, -0.5589461, 0.45644605, -2.0928183, 7.1560116, -0.98275805)
-visible = false
+light_color = Color(0.96429926, 0.9585182, 0.93126035, 1)
+light_energy = 9.26
+shadow_enabled = true
+spot_range = 20.0
+spot_angle = 30.0
+spot_angle_attenuation = 1.2311472
+
+[node name="SpotLight3D3" type="SpotLight3D" parent="Lighting" unique_id=498795413]
+transform = Transform3D(0.52776176, -0.8235246, -0.20802619, 0.49217, 0.0968847, 0.8650908, -0.692269, -0.5589461, 0.45644605, -2.0928183, 7.6560116, -13.482758)
+light_color = Color(0.96429926, 0.9585182, 0.93126035, 1)
+light_energy = 9.26
+shadow_enabled = true
+spot_range = 20.0
+spot_angle = 30.0
+spot_angle_attenuation = 1.2311472
+
+[node name="SpotLight3D4" type="SpotLight3D" parent="Lighting" unique_id=1984810971]
+transform = Transform3D(0.52776176, -0.8235246, -0.20802619, 0.49217, 0.0968847, 0.8650908, -0.692269, -0.5589461, 0.45644605, -0.59281826, 8.156012, -23.982758)
 light_color = Color(0.96429926, 0.9585182, 0.93126035, 1)
 light_energy = 9.26
 shadow_enabled = true
@@ -67,7 +78,7 @@ spot_angle_attenuation = 1.2311472
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lighting" unique_id=413199500]
 transform = Transform3D(0.76604444, 0.49240384, -0.4131759, 0, 0.64278764, 0.76604444, 0.6427876, -0.58682406, 0.4924039, 0, 0, 0)
-visible = false
+light_energy = 0.061
 shadow_enabled = true
 directional_shadow_fade_start = 0.214
 sky_mode = 1
@@ -80,6 +91,8 @@ environment = SubResource("Environment_qy63d")
 [node name="CanvasLayer" type="CanvasLayer" parent="HUD" unique_id=1230928883]
 
 [node name="DialogueBox" parent="HUD/CanvasLayer" unique_id=1878604976 instance=ExtResource("5_5k4jt")]
+anchors_preset = 12
+offset_top = 0.0
 
 [node name="PromptBox" parent="HUD/CanvasLayer" unique_id=597706640 instance=ExtResource("6_qy63d")]
 

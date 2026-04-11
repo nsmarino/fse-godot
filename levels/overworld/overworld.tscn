@@ -1,35 +1,177 @@
 [gd_scene format=3 uid="uid://xfjfxk0ojb5c"]
 
-[ext_resource type="PackedScene" uid="uid://c5u0q4ta36o0y" path="res://objects/nightbloom/overworld/triggers/arena/ProtoArenaTrigger.tscn" id="1_gfxx5"]
-[ext_resource type="PackedScene" path="res://objects/nightbloom/overworld/triggers/dialogue/ProtoDialogueTrigger.tscn" id="2_dialogue"]
-[ext_resource type="PackedScene" uid="uid://docj2g3ana3bu" path="res://models/level/overworld/basis-1.glb" id="2_hkyut"]
-[ext_resource type="PackedScene" uid="uid://b4ijqs6s483yo" path="res://models/level/overworld/blockout-1.glb" id="2_t0r04"]
+[ext_resource type="PackedScene" uid="uid://bg76dwtiwq5mu" path="res://objects/nightbloom/overworld/triggers/dialogue/ProtoDialogueTrigger.tscn" id="2_dialogue"]
+[ext_resource type="PackedScene" uid="uid://cvgem5heq8dgi" path="res://models/level/decoration/bush-1.tscn" id="2_hkyut"]
+[ext_resource type="PackedScene" uid="uid://cvfmxl7ak0n8h" path="res://blender/level/fountain-hall.blend" id="2_t0r04"]
+[ext_resource type="PackedScene" uid="uid://m1o68xgp4ij1" path="res://models/level/decoration/bush-2.tscn" id="3_t0r04"]
+[ext_resource type="PackedScene" uid="uid://by5yngygax17d" path="res://models/level/decoration/bush-top-1.glb" id="4_cp383"]
 
 [node name="Overworld" type="Node3D" unique_id=1089087201]
 
 [node name="Ground" type="Node3D" parent="." unique_id=865474664]
 
-[node name="Overworld" parent="Ground" unique_id=990757761 instance=ExtResource("2_hkyut")]
+[node name="fountain-hall" parent="Ground" unique_id=1376250301 instance=ExtResource("2_t0r04")]
 
-[node name="StaticBody3D" parent="Ground/Overworld/Basis" parent_id_path=PackedInt32Array(990757761, 1732112910) index="0" unique_id=1165476374]
+[node name="Courtyard" parent="Ground/fountain-hall" index="2" unique_id=1891787914]
+visible = false
+
+[node name="StaticBody3D" parent="Ground/fountain-hall/Courtyard" index="0" unique_id=1164538934]
 collision_layer = 3
 
-[node name="Overworld" parent="Ground/Overworld" unique_id=680479981 instance=ExtResource("2_t0r04")]
+[node name="Arches2" parent="Ground/fountain-hall" index="5" unique_id=472748377]
+visible = false
+
+[node name="StaticBody3D" parent="Ground/fountain-hall/Arches2" index="0" unique_id=1684289907]
+collision_layer = 3
+
+[node name="SecondFloor" parent="Ground/fountain-hall" index="6" unique_id=403732083]
+visible = false
+
+[node name="StaticBody3D" parent="Ground/fountain-hall/SecondFloor" index="0" unique_id=23566772]
+collision_layer = 3
+
+[node name="FrontWall" parent="Ground/fountain-hall" index="9" unique_id=1181447197]
+visible = false
+
+[node name="StaticBody3D" parent="Ground/fountain-hall/FrontWall" index="0" unique_id=425171434]
+collision_layer = 3
+
+[node name="Gate" parent="Ground/fountain-hall" index="10" unique_id=334959373]
+visible = false
+
+[node name="StaticBody3D" parent="Ground/fountain-hall/Gate" index="0" unique_id=1244138541]
+collision_layer = 3
+
+[node name="Cylinder" parent="Ground/fountain-hall" index="11" unique_id=419027449]
+visible = false
+
+[node name="Cylinder_001" parent="Ground/fountain-hall" index="12" unique_id=1517206877]
+visible = false
+
+[node name="StaticBody3D" parent="Ground/fountain-hall/InnerWall" parent_id_path=PackedInt32Array(1376250301, 1046667) index="0" unique_id=1071926183]
+collision_layer = 3
 
 [node name="Decoration" type="Node3D" parent="." unique_id=2107315747]
+
+[node name="MeshInstance3D" parent="Decoration" unique_id=77084086 instance=ExtResource("2_hkyut")]
+transform = Transform3D(0.49999997, 0.86602545, -3.7855173e-08, 0, -4.371139e-08, -1, -0.86602545, 0.49999997, -2.1855692e-08, 4.623564, -0.5, -2.1488552)
+
+[node name="MeshInstance3D2" parent="Decoration" unique_id=1432494740 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-0.50000006, 0.8660253, -3.7855166e-08, 0, -4.371139e-08, -1, -0.8660253, -0.50000006, 2.1855696e-08, 4.7235637, -0.5, -5.598855)
+
+[node name="MeshInstance3D3" parent="Decoration" unique_id=943953068 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-0.50000006, 0.8660253, -3.7855166e-08, 0, -4.371139e-08, -1, -0.8660253, -0.50000006, 2.1855696e-08, 5.123564, -0.5, -6.648855)
+
+[node name="MeshInstance3D4" parent="Decoration" unique_id=711327447 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-0.5000001, 0.8660254, -3.7855173e-08, -3.3147269e-15, -4.3711392e-08, -1, -0.8660254, -0.5000001, 2.1855698e-08, 4.623564, -0.5, -3.1488552)
+
+[node name="MeshInstance3D5" parent="Decoration" unique_id=2117929944 instance=ExtResource("2_hkyut")]
+transform = Transform3D(0.5, 0.8660255, -3.7855177e-08, -1.53837e-15, -4.371139e-08, -1, -0.8660255, 0.5, -2.1855694e-08, 4.623564, -0.5, -4.348855)
+
+[node name="MeshInstance3D6" parent="Decoration" unique_id=53264631 instance=ExtResource("2_hkyut")]
+transform = Transform3D(0.49999997, 0.86602545, -3.7855173e-08, 0, -4.371139e-08, -1, -0.86602545, 0.49999997, -2.1855692e-08, 4.7235637, -0.5, -6.948855)
+
+[node name="MeshInstance3D7" parent="Decoration" unique_id=1441308644 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-5.9604645e-08, 1, -4.3711385e-08, 0, -4.371139e-08, -1, -1, -5.9604645e-08, 3.5527137e-15, 4.123564, -0.5, -7.648855)
+
+[node name="MeshInstance3D8" parent="Decoration" unique_id=637099477 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-0.50000006, 0.8660253, -3.7855166e-08, 0, -4.371139e-08, -1, -0.8660253, -0.50000006, 2.1855696e-08, 4.623564, -0.5, -10.148855)
+
+[node name="MeshInstance3D9" parent="Decoration" unique_id=1582041040 instance=ExtResource("2_hkyut")]
+transform = Transform3D(0.5, 0.8660255, -3.7855177e-08, -1.53837e-15, -4.371139e-08, -1, -0.8660255, 0.5, -2.1855694e-08, 4.623564, -0.5, -7.148855)
+
+[node name="MeshInstance3D10" parent="Decoration" unique_id=1875408112 instance=ExtResource("2_hkyut")]
+transform = Transform3D(0.5, 0.8660255, -3.7855177e-08, -1.53837e-15, -4.371139e-08, -1, -0.8660255, 0.5, -2.1855694e-08, 4.623564, -0.5, -8.648855)
+
+[node name="MeshInstance3D11" parent="Decoration" unique_id=1860641474 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-5.9604645e-08, 1, -4.3711385e-08, 0, -4.371139e-08, -1, -1, -5.9604645e-08, 3.5527137e-15, 5.2637568, -0.5, -10.793599)
+
+[node name="MeshInstance3D12" parent="Decoration" unique_id=371415947 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-0.50000006, 0.8660253, -3.7855166e-08, 0, -4.371139e-08, -1, -0.8660253, -0.50000006, 2.1855696e-08, 4.2637568, -0.5, -12.52565)
+
+[node name="MeshInstance3D13" parent="Decoration" unique_id=1230738406 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-0.86602557, 0.49999994, -2.185569e-08, -1.53837e-15, -4.371139e-08, -1, -0.49999994, -0.86602557, 3.7855173e-08, 3.4467692, -0.5, -14.940714)
+
+[node name="MeshInstance3D14" parent="Decoration" unique_id=1957325762 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-5.9604645e-08, 1, -4.3711392e-08, -3.3147269e-15, -4.3711392e-08, -1, -1, -5.9604645e-08, 1.7763568e-15, 4.946769, -0.5, -12.342637)
+
+[node name="MeshInstance3D15" parent="Decoration" unique_id=1178329423 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-5.9604645e-08, 1, -4.3711392e-08, -3.3147269e-15, -4.3711392e-08, -1, -1, -5.9604645e-08, 1.7763568e-15, 4.196769, -0.5, -13.641676)
+
+[node name="MeshInstance3D16" parent="Decoration" unique_id=267864225 instance=ExtResource("2_hkyut")]
+transform = Transform3D(0.49999997, 0.86602545, -3.7855173e-08, 0, -4.371139e-08, -1, -0.86602545, 0.49999997, -2.1855692e-08, -5.376436, -0.5, -2.1488552)
+
+[node name="MeshInstance3D17" parent="Decoration" unique_id=1461403895 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-5.9604645e-08, 1, -4.3711385e-08, 0, -4.371139e-08, -1, -1, -5.9604645e-08, 3.5527137e-15, -5.376436, -0.5, -4.148855)
+
+[node name="MeshInstance3D18" parent="Decoration" unique_id=2080309971 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-0.50000006, 0.8660253, -3.7855166e-08, 0, -4.371139e-08, -1, -0.8660253, -0.50000006, 2.1855696e-08, -4.876436, -0.5, -6.648855)
+
+[node name="MeshInstance3D19" parent="Decoration" unique_id=958462822 instance=ExtResource("2_hkyut")]
+transform = Transform3D(0.5, 0.8660255, -3.7855177e-08, -1.53837e-15, -4.371139e-08, -1, -0.8660255, 0.5, -2.1855694e-08, -4.876436, -0.5, -3.6488552)
+
+[node name="MeshInstance3D20" parent="Decoration" unique_id=2120511108 instance=ExtResource("2_hkyut")]
+transform = Transform3D(0.5, 0.8660255, -3.7855177e-08, -1.53837e-15, -4.371139e-08, -1, -0.8660255, 0.5, -2.1855694e-08, -4.876436, -0.5, -5.148855)
+
+[node name="MeshInstance3D21" parent="Decoration" unique_id=337480762 instance=ExtResource("2_hkyut")]
+transform = Transform3D(0.49999997, 0.86602545, -3.7855173e-08, 0, -4.371139e-08, -1, -0.86602545, 0.49999997, -2.1855692e-08, -5.876436, -0.5, -5.648855)
+
+[node name="MeshInstance3D22" parent="Decoration" unique_id=1380199382 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-5.9604645e-08, 1, -4.3711385e-08, 0, -4.371139e-08, -1, -1, -5.9604645e-08, 3.5527137e-15, -5.876436, -0.5, -7.648855)
+
+[node name="MeshInstance3D23" parent="Decoration" unique_id=1913299267 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-0.50000006, 0.8660253, -3.7855166e-08, 0, -4.371139e-08, -1, -0.8660253, -0.50000006, 2.1855696e-08, -5.376436, -0.5, -10.148855)
+
+[node name="MeshInstance3D24" parent="Decoration" unique_id=1674189010 instance=ExtResource("2_hkyut")]
+transform = Transform3D(0.5, 0.8660255, -3.7855177e-08, -1.53837e-15, -4.371139e-08, -1, -0.8660255, 0.5, -2.1855694e-08, -5.376436, -0.5, -7.148855)
+
+[node name="MeshInstance3D25" parent="Decoration" unique_id=1443742262 instance=ExtResource("2_hkyut")]
+transform = Transform3D(0.5, 0.8660255, -3.7855177e-08, -1.53837e-15, -4.371139e-08, -1, -0.8660255, 0.5, -2.1855694e-08, -5.376436, -0.5, -8.648855)
+
+[node name="MeshInstance3D26" parent="Decoration" unique_id=1319577107 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-5.9604645e-08, 1, -4.3711385e-08, 0, -4.371139e-08, -1, -1, -5.9604645e-08, 3.5527137e-15, -4.7362432, -0.5, -10.793599)
+
+[node name="MeshInstance3D27" parent="Decoration" unique_id=1171416892 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-0.50000006, 0.8660253, -3.7855166e-08, 0, -4.371139e-08, -1, -0.8660253, -0.50000006, 2.1855696e-08, -5.7362432, -0.5, -12.52565)
+
+[node name="MeshInstance3D28" parent="Decoration" unique_id=1690253811 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-0.86602557, 0.49999994, -2.185569e-08, -1.53837e-15, -4.371139e-08, -1, -0.49999994, -0.86602557, 3.7855173e-08, -5.553231, -0.5, -13.940714)
+
+[node name="MeshInstance3D29" parent="Decoration" unique_id=137038392 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-5.9604645e-08, 1, -4.3711392e-08, -3.3147269e-15, -4.3711392e-08, -1, -1, -5.9604645e-08, 1.7763568e-15, -5.053231, -0.5, -12.342637)
+
+[node name="MeshInstance3D30" parent="Decoration" unique_id=681411747 instance=ExtResource("2_hkyut")]
+transform = Transform3D(-5.9604645e-08, 1, -4.3711392e-08, -3.3147269e-15, -4.3711392e-08, -1, -1, -5.9604645e-08, 1.7763568e-15, -5.803231, -0.5, -13.641676)
+
+[node name="MeshInstance3D31" parent="Decoration" unique_id=277142847 instance=ExtResource("3_t0r04")]
+transform = Transform3D(0.3420201, 0.93969256, -4.1075264e-08, -6.169221e-16, -4.3711392e-08, -1, -0.93969256, 0.3420201, -1.4950174e-08, 5.15, -0.15725768, -2.75)
+
+[node name="MeshInstance3D32" parent="Decoration" unique_id=555766588 instance=ExtResource("3_t0r04")]
+transform = Transform3D(-0.17364825, 0.98480785, -4.3047315e-08, 0.17101006, 0.030153656, -0.9848077, -0.96984637, -0.17101015, -0.17364818, 5.3, -0.4572577, -4.45)
+
+[node name="MeshInstance3D36" parent="Decoration" unique_id=2059547895 instance=ExtResource("3_t0r04")]
+transform = Transform3D(-0.17364825, 0.98480785, -4.5738993e-08, -0.33682412, -0.05939125, -0.9396926, -0.9254166, -0.16317594, 0.34202015, 5.3, -0.5572577, -5.6)
+
+[node name="MeshInstance3D33" parent="Decoration" unique_id=950474704 instance=ExtResource("3_t0r04")]
+transform = Transform3D(-4.371139e-08, 1, -4.371139e-08, 0, -4.371139e-08, -1, -1, -4.371139e-08, 1.9106855e-15, 5.15, -0.15725768, -7.5)
+
+[node name="MeshInstance3D35" parent="Decoration" unique_id=1607596552 instance=ExtResource("3_t0r04")]
+transform = Transform3D(-4.371139e-08, 1, -4.371139e-08, 0, -4.371139e-08, -1, -1, -4.371139e-08, 1.9106855e-15, 4.7000003, -0.8072577, -5)
+
+[node name="MeshInstance3D34" parent="Decoration" unique_id=632113582 instance=ExtResource("3_t0r04")]
+transform = Transform3D(-4.371139e-08, 1, -4.371139e-08, 0, -4.371139e-08, -1, -1, -4.371139e-08, 1.9106855e-15, 5.15, -0.5072577, -9.5)
+
+[node name="bush-top-1" parent="Decoration" unique_id=1314460419 instance=ExtResource("4_cp383")]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 5.1000004, -0.65, -3.75)
 
 [node name="Interactive" type="Node3D" parent="." unique_id=498288437]
 
 [node name="ArenaTriggers" type="Node3D" parent="Interactive" unique_id=695524052]
 
-[node name="ProtoArenaTrigger" parent="Interactive/ArenaTriggers" unique_id=1429759089 instance=ExtResource("1_gfxx5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0, -27)
-
 [node name="DialogueTriggers" type="Node3D" parent="Interactive" unique_id=1996927852]
 
 [node name="ProtoDialogueTrigger" parent="Interactive/DialogueTriggers" unique_id=2136767709 instance=ExtResource("2_dialogue")]
-transform = Transform3D(0.99938846, 0, 0.034966666, 0, 1, 0, -0.034966666, 0, 0.99938846, -5.638176, 0, -11.99979)
+transform = Transform3D(0.99938846, 0, 0.034966666, 0, 1, 0, -0.034966666, 0, 0.99938846, -12.138176, 0.5, -11.99979)
 
-[editable path="Ground/Overworld"]
-[editable path="Interactive/ArenaTriggers/ProtoArenaTrigger"]
+[editable path="Ground/fountain-hall"]
 [editable path="Interactive/DialogueTriggers/ProtoDialogueTrigger"]

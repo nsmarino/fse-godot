@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://b3f72nfieyidf"]
+
+[ext_resource type="PackedScene" uid="uid://b7nlcrpaih5l4" path="res://blockouts/ramp-up.tscn" id="1_f28jh"]
+
+[node name="Node3D" unique_id=737390716 instance=ExtResource("1_f28jh")]
+
+[node name="shape-slope2" parent="." index="0" unique_id=1656815194]
+transform = Transform3D(5, 0, 0, 0, 2.25, 0, 0, 0, 3, 0, 0, 0)
+
+[editable path="shape-slope2"]

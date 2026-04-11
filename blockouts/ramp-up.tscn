@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://b7nlcrpaih5l4"]
+
+[ext_resource type="PackedScene" uid="uid://0xdl0tfjjxhg" path="res://blockouts/prototyping/shape-slope.glb" id="1_2bunx"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_06uaj"]
+points = PackedVector3Array(0.5, 1, 0.5, 0.5, 1, -0.5, -0.5, 0, 0.5, 0.5, 0, 0.5, 0.5, 0, -0.5, -0.5, 0, -0.5)
+
+[node name="Node3D" type="Node3D" unique_id=737390716]
+
+[node name="shape-slope2" parent="." unique_id=1656815194 instance=ExtResource("1_2bunx")]
+transform = Transform3D(10, 0, 0, 0, 4.5, 0, 0, 0, 3, 0, 0, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="shape-slope2/shape-slope" parent_id_path=PackedInt32Array(1656815194, 2140395171) index="0" unique_id=1260032076]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="shape-slope2/shape-slope/StaticBody3D" unique_id=431226577]
+shape = SubResource("ConvexPolygonShape3D_06uaj")
+
+[editable path="shape-slope2"]
