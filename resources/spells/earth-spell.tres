@@ -1,10 +1,9 @@
-[gd_resource type="Resource" script_class="SpellData" format=3 uid="uid://svwuuhwaq153"]
+[gd_resource type="Resource" format=3 uid="uid://svwuuhwaq153"]
 
-[ext_resource type="Script" uid="uid://cttr2bvqc6o83" path="res://objects/nightbloom/combat/player/SpellData.gd" id="1_lwt6l"]
+[ext_resource type="Script" path="res://resources/spells/spell_data.gd" id="1_lwt6l"]
 
 [resource]
 script = ExtResource("1_lwt6l")
 name = "Earth Spell"
 animation = "Spell"
 attack_power = 10
-metadata/_custom_type_script = "uid://cttr2bvqc6o83"

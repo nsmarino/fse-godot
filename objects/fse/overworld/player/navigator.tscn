@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://cowyb5vnlbv4i"]
+
+[ext_resource type="Script" uid="uid://c53xuce5up7n1" path="res://objects/fse/overworld/player/navigator.gd" id="1_m88ny"]
+[ext_resource type="PackedScene" uid="uid://uq028cm80jk1" path="res://models/character/player/party/elena-rigged.glb" id="2_sdvag"]
+[ext_resource type="Script" uid="uid://bfnj7nkyfm24o" path="res://objects/fse/overworld/player/navigator_state_machine.gd" id="3_state_machine"]
+[ext_resource type="Script" uid="uid://33vbwc8xderj" path="res://objects/fse/overworld/player/states/idle_state.gd" id="4_idle"]
+[ext_resource type="Script" uid="uid://dw7dk77eps46f" path="res://objects/fse/overworld/player/states/locomotion_state.gd" id="5_locomotion"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tbgi4"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_tefeu"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_m88ny"]
+
+[node name="Navigator" type="CharacterBody3D" groups=["player"] unique_id=1335866884]
+script = ExtResource("1_m88ny")
+move_speed = 6.75
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1222655305]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_tbgi4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=245544883]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
+mesh = SubResource("CapsuleMesh_tefeu")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="." unique_id=848395057]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0008976, 0)
+collision_mask = 2
+shape = SubResource("SphereShape3D_m88ny")
+spring_length = 12.0
+margin = 0.5
+
+[node name="Camera3D" type="Camera3D" parent="SpringArm3D" unique_id=967701111]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+current = true
+fov = 30.0
+
+[node name="elena" parent="." unique_id=1203967877 instance=ExtResource("2_sdvag")]
+
+[node name="StateMachine" type="Node" parent="." unique_id=2124590299 node_paths=PackedStringArray("owner_node")]
+script = ExtResource("3_state_machine")
+owner_node = NodePath("..")
+
+[node name="Idle" type="Node" parent="StateMachine" unique_id=627919311]
+script = ExtResource("4_idle")
+state_name = "idle"
+
+[node name="Locomotion" type="Node" parent="StateMachine" unique_id=1261270721]
+script = ExtResource("5_locomotion")
+state_name = "locomotion"
+
+[editable path="elena"]
