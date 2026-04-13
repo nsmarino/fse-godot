@@ -18,7 +18,6 @@ func _register_with_game_manager() -> void:
 	if GameManager:
 		GameManager.register_navigator(navigator)
 		GameManager.register_overworld(level)
-		GameManager.register_overworld_lighting(lighting)
 		print("[Main] Registered navigator, overworld, and lighting with GameManager")
 	else:
 		push_error("[Main] GameManager autoload not found!")
