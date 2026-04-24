@@ -14,11 +14,15 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_m88ny"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_0lg8p"]
+size = Vector3(0.1, 0.2, 2)
 
 [node name="Navigator" type="CharacterBody3D" unique_id=1335866884 groups=["player"]]
 script = ExtResource("1_m88ny")
 move_speed = 6.75
 default_weapon_scene = ExtResource("6_player_blaster")
+ads_camera_local_offset = Vector3(0.8, -0.5, 0)
+ads_spring_length = 3.0
+ads_fov = 30.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1222655305]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -36,7 +40,9 @@ shape = SubResource("SphereShape3D_m88ny")
 spring_length = 12.0
 margin = 0.5
 
-[node name="Camera3D" type="Camera3D" parent="SpringArm3D" unique_id=967701111]
+[node name="CameraRig" type="Node3D" parent="SpringArm3D" unique_id=1805463494]
+
+[node name="Camera3D" type="Camera3D" parent="SpringArm3D/CameraRig" unique_id=967701111]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 current = true
 fov = 30.0
@@ -44,10 +50,10 @@ fov = 30.0
 [node name="elena" parent="." unique_id=1203967877 instance=ExtResource("2_sdvag")]
 
 [node name="WeaponSocket" type="Node3D" parent="elena" unique_id=1736896161]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1.5, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1.5, 0.7)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="elena/WeaponSocket" unique_id=1116717906]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+transform = Transform3D(0.49240386, 0, -0.08682409, 0, 0.5, 0, 0.08682409, 0, 0.49240386, 0.099999994, 0, -0.5)
 mesh = SubResource("BoxMesh_0lg8p")
 
 [node name="StateMachine" type="Node" parent="." unique_id=2124590299 node_paths=PackedStringArray("owner_node")]

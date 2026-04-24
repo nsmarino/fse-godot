@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://wvk4w6lot138" path="res://hdr/kloppenheim_07_puresky_1k.hdr" id="4_m1504"]
 [ext_resource type="PackedScene" uid="uid://qs2cdhultq7o" path="res://ui/overworld/DialogueBox.tscn" id="5_5k4jt"]
 [ext_resource type="PackedScene" uid="uid://dbubdssx6nydw" path="res://ui/overworld/PromptBox.tscn" id="6_qy63d"]
+[ext_resource type="PackedScene" path="res://ui/overworld/CombatUI.tscn" id="7_combat_ui"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_21ko3"]
 panorama = ExtResource("4_m1504")
@@ -48,6 +49,8 @@ anchors_preset = 12
 offset_top = 0.0
 
 [node name="PromptBox" parent="HUD/CanvasLayer" unique_id=597706640 instance=ExtResource("6_qy63d")]
+
+[node name="CombatUI" parent="HUD" unique_id=1684459129 instance=ExtResource("7_combat_ui")]
 
 [node name="Level" type="Node3D" parent="." unique_id=2134277765]
 

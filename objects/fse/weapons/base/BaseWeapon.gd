@@ -2,6 +2,7 @@ extends Node3D
 class_name FseBaseWeapon
 
 @export var data: Resource
+@export var muzzle_spawn_offset: float = 0.3
 
 @onready var muzzle: Marker3D = $Muzzle
 @onready var cooldown_timer: Timer = $CooldownTimer
@@ -62,4 +63,6 @@ func _spawn_projectiles(aim_direction: Vector3) -> void:
 		world.add_child(projectile)
 		projectile.speed = float(data.get("muzzle_velocity"))
 		projectile.damage = float(data.get("damage"))
-		projectile.launch(muzzle.global_transform, direction, owner_character)
+		var spawn_transform: Transform3D = muzzle.global_transform
+		spawn_transform.origin += direction * muzzle_spawn_offset
+		projectile.launch(spawn_transform, direction, owner_character)
