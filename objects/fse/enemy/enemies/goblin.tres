@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="FseEnemyData" format=3]
+[gd_resource type="Resource" script_class="FseEnemyData" format=3 uid="uid://bqk088fibmdec"]
 
 [ext_resource type="Script" uid="uid://dh7jnverpqck7" path="res://objects/fse/enemy/EnemyData.gd" id="1_enemydata"]
 [ext_resource type="PackedScene" uid="uid://b8dmw5js5lj1x" path="res://models/character/player/combat-player-pawn.glb" id="2_mesh"]
@@ -7,13 +7,4 @@
 script = ExtResource("1_enemydata")
 display_name = &"Goblin"
 character_scene = ExtResource("2_mesh")
-max_hp = 100
-speed = 3.0
 attack_power = 15
-attack_range = 2.0
-pursue_range = 15.0
-leash_radius = 40.0
-anim_idle = "Idle"
-anim_locomotion = "RUN"
-anim_attack = "Combo1"
-anim_receive_hit = "HitReact"

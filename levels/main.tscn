@@ -34,13 +34,7 @@ adjustment_saturation = 1.26
 script = ExtResource("1_0xm2m")
 
 [node name="Navigator" parent="." unique_id=1672489611 instance=ExtResource("2_tbgi4")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2, -1, -2.5)
 use_gravity = true
-
-[node name="Level" type="Node3D" parent="." unique_id=2134277765]
-
-[node name="Overworld" parent="Level" unique_id=1089087201 instance=ExtResource("3_5k4jt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.0500001, 0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2065183461]
 environment = SubResource("Environment_qy63d")
@@ -54,3 +48,10 @@ anchors_preset = 12
 offset_top = 0.0
 
 [node name="PromptBox" parent="HUD/CanvasLayer" unique_id=597706640 instance=ExtResource("6_qy63d")]
+
+[node name="Level" type="Node3D" parent="." unique_id=2134277765]
+
+[node name="Overworld" parent="Level" unique_id=1089087201 instance=ExtResource("3_5k4jt")]
+
+[editable path="Navigator"]
+[editable path="Navigator/elena"]

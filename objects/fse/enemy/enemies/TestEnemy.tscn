@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://di2js8bdxktvl"]
+
+[ext_resource type="PackedScene" uid="uid://t8fvwynvct2" path="res://objects/fse/enemy/base/BaseEnemy.tscn" id="1_s744v"]
+[ext_resource type="Resource" uid="uid://bqk088fibmdec" path="res://objects/fse/enemy/enemies/goblin.tres" id="2_yu7rg"]
+
+[node name="FseEnemy" unique_id=1489081750 instance=ExtResource("1_s744v")]
+enemy_data = ExtResource("2_yu7rg")
+
+[node name="NavigationAgent3D" parent="." index="1" unique_id=2043099844]
+avoidance_enabled = false

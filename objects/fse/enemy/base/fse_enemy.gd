@@ -4,7 +4,6 @@ class_name FseEnemy
 signal died
 
 @export var enemy_data: FseEnemyData
-@export var player: CharacterBody3D
 
 @onready var state_machine: Node = $StateMachine
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
@@ -36,7 +35,8 @@ func _ready() -> void:
 	else:
 		push_warning("[FseEnemy:%s] No character_scene in enemy_data" % name)
 
-	_setup_state_machine()
+	var player_body: CharacterBody3D = _resolve_player()
+	_setup_state_machine(player_body)
 
 	if OS.is_debug_build():
 		await get_tree().process_frame
@@ -76,27 +76,27 @@ func _find_animation_player(node: Node) -> AnimationPlayer:
 	return null
 
 
-func _setup_state_machine() -> void:
+func _resolve_player() -> CharacterBody3D:
+	var node: Node = get_tree().get_first_node_in_group("player")
+	if node is CharacterBody3D:
+		return node as CharacterBody3D
+	push_warning("[FseEnemy:%s] No CharacterBody3D in global group \"player\"" % name)
+	return null
+
+
+func _setup_state_machine(player_body: CharacterBody3D) -> void:
 	if not state_machine:
 		return
 	for child in state_machine.get_children():
 		if child is FseAIState:
 			var st: FseAIState = child as FseAIState
 			st.character = self
-			st.player = player
+			st.player = player_body
 			st.spawn_point = spawn_point
 			st.animator = animator
 			st.nav_agent = nav_agent
 			st.attack_area = attack_area
 			st.enemy_data = enemy_data
-
-
-func set_player(p: CharacterBody3D) -> void:
-	player = p
-	if state_machine:
-		for child in state_machine.get_children():
-			if child is FseAIState:
-				(child as FseAIState).player = player
 
 
 func command_state(state_name: String) -> void:
@@ -147,7 +147,6 @@ static func spawn_from_markers(
 	markers_root: Node,
 	enemy_scene: PackedScene,
 	data: FseEnemyData,
-	player_ref: CharacterBody3D,
 	count: int
 ) -> Array[FseEnemy]:
 	var result: Array[FseEnemy] = []
@@ -170,7 +169,6 @@ static func spawn_from_markers(
 		var enemy: FseEnemy = inst as FseEnemy
 		if data:
 			enemy.enemy_data = data
-		enemy.set_player(player_ref)
 		parent.add_child(enemy)
 		var m: Marker3D = markers[i]
 		enemy.global_position = m.global_position

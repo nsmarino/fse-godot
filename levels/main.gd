@@ -4,7 +4,6 @@ extends Node3D
 
 @onready var navigator: CharacterBody3D = $Navigator
 @onready var level: Node3D = $Level
-@onready var lighting: Node3D = $Lighting
 
 
 func _ready() -> void:

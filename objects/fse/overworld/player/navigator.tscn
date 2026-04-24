@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://bfnj7nkyfm24o" path="res://objects/fse/overworld/player/navigator_state_machine.gd" id="3_state_machine"]
 [ext_resource type="Script" uid="uid://33vbwc8xderj" path="res://objects/fse/overworld/player/states/idle_state.gd" id="4_idle"]
 [ext_resource type="Script" uid="uid://dw7dk77eps46f" path="res://objects/fse/overworld/player/states/locomotion_state.gd" id="5_locomotion"]
+[ext_resource type="PackedScene" path="res://objects/fse/weapons/player/PlayerBlaster.tscn" id="6_player_blaster"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tbgi4"]
 
@@ -12,9 +13,12 @@
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_m88ny"]
 
-[node name="Navigator" type="CharacterBody3D" groups=["player"] unique_id=1335866884]
+[sub_resource type="BoxMesh" id="BoxMesh_0lg8p"]
+
+[node name="Navigator" type="CharacterBody3D" unique_id=1335866884 groups=["player"]]
 script = ExtResource("1_m88ny")
 move_speed = 6.75
+default_weapon_scene = ExtResource("6_player_blaster")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1222655305]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -38,6 +42,13 @@ current = true
 fov = 30.0
 
 [node name="elena" parent="." unique_id=1203967877 instance=ExtResource("2_sdvag")]
+
+[node name="WeaponSocket" type="Node3D" parent="elena" unique_id=1736896161]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1.5, 1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="elena/WeaponSocket" unique_id=1116717906]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+mesh = SubResource("BoxMesh_0lg8p")
 
 [node name="StateMachine" type="Node" parent="." unique_id=2124590299 node_paths=PackedStringArray("owner_node")]
 script = ExtResource("3_state_machine")

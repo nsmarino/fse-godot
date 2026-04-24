@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://t8fvwynvct2"]
 
-[ext_resource type="Script" path="res://objects/fse/enemy/base/fse_enemy.gd" id="1_fse"]
+[ext_resource type="Script" uid="uid://c2tglspquq0c" path="res://objects/fse/enemy/base/fse_enemy.gd" id="1_fse"]
 [ext_resource type="Script" uid="uid://bjo7v2p28m11i" path="res://objects/fse/enemy/base/state_machine.gd" id="2_sm"]
 [ext_resource type="Script" uid="uid://bj3j287mfglbc" path="res://objects/fse/enemy/base/states/idle.gd" id="3_idle"]
-[ext_resource type="Script" path="res://objects/fse/enemy/base/states/wander.gd" id="4_wander"]
-[ext_resource type="Script" path="res://objects/fse/enemy/base/states/pursue.gd" id="5_pursue"]
+[ext_resource type="Script" uid="uid://b8ajuyncbjeuw" path="res://objects/fse/enemy/base/states/wander.gd" id="4_wander"]
+[ext_resource type="Script" uid="uid://dybuamxqqnxgx" path="res://objects/fse/enemy/base/states/pursue.gd" id="5_pursue"]
 [ext_resource type="Script" uid="uid://bpde0e5tnoswn" path="res://objects/fse/enemy/base/states/attack.gd" id="6_attack"]
 [ext_resource type="Script" uid="uid://segvw73ki1oa" path="res://objects/fse/enemy/base/states/death.gd" id="7_death"]
 
@@ -13,53 +13,52 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_attack"]
 radius = 1.5
 
-[node name="FseEnemy" type="CharacterBody3D" groups=["enemy"]]
+[node name="FseEnemy" type="CharacterBody3D" unique_id=1721681537 groups=["enemy"]]
 script = ExtResource("1_fse")
 
-[node name="Collider" type="CollisionShape3D" parent="."]
+[node name="Collider" type="CollisionShape3D" parent="." unique_id=2050149243]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_collider")
 
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=2043099844]
 path_desired_distance = 0.5
 avoidance_enabled = true
-use_3d_avoidance = false
-keep_y_velocity = false
 radius = 0.6
 neighbor_distance = 5.0
 max_neighbors = 5
+keep_y_velocity = false
 
-[node name="AttackArea" type="Area3D" parent="."]
+[node name="AttackArea" type="Area3D" parent="." unique_id=1873463528]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1.5)
 monitoring = false
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="AttackArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AttackArea" unique_id=1726134100]
 shape = SubResource("SphereShape3D_attack")
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("character")]
+[node name="StateMachine" type="Node" parent="." unique_id=2137188928]
 script = ExtResource("2_sm")
-character = NodePath("..")
-default_state = "idle"
 
-[node name="Idle" type="Node" parent="StateMachine"]
+[node name="Idle" type="Node" parent="StateMachine" unique_id=149910653]
 script = ExtResource("3_idle")
 state_name = "idle"
 
-[node name="Wander" type="Node" parent="StateMachine"]
+[node name="Wander" type="Node" parent="StateMachine" unique_id=939703663]
 script = ExtResource("4_wander")
 state_name = "wander"
 
-[node name="Pursue" type="Node" parent="StateMachine"]
+[node name="Pursue" type="Node" parent="StateMachine" unique_id=1128375458]
 script = ExtResource("5_pursue")
 state_name = "pursue"
 
-[node name="Attack" type="Node" parent="StateMachine"]
+[node name="Attack" type="Node" parent="StateMachine" unique_id=1551463584]
 script = ExtResource("6_attack")
-fallback_duration = 0.8
 state_name = "attack"
 
-[node name="Death" type="Node" parent="StateMachine"]
+[node name="Death" type="Node" parent="StateMachine" unique_id=1043266533]
 script = ExtResource("7_death")
 state_name = "death"
 
+[node name="Marker3D" type="Marker3D" parent="." unique_id=95766855]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+gizmo_extents = 3.0

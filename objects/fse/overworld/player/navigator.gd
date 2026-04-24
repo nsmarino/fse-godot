@@ -17,6 +17,10 @@ extends CharacterBody3D
 @export var mouse_sensitivity: float = 0.003
 @export var gamepad_look_sensitivity: float = 3.0
 
+@export_category("Combat")
+@export var default_weapon_scene: PackedScene
+@export var aim_ray_length: float = 1000.0
+
 # Camera spring arm - add as child of this CharacterBody3D
 @onready var spring_arm: SpringArm3D = $SpringArm3D
 @onready var camera: Camera3D = $SpringArm3D/Camera3D
@@ -24,11 +28,15 @@ extends CharacterBody3D
 
 var camera_rotation := Vector2.ZERO  # x = yaw, y = pitch
 var pitch_limit := deg_to_rad(89.0)
+var weapon_socket: Node3D = null
+var equipped_weapon: Node3D = null
 
 
 func _ready() -> void:
 	# Capture mouse for camera control
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	weapon_socket = _resolve_weapon_socket()
+	_equip_default_weapon()
 
 
 func _input(event: InputEvent) -> void:
@@ -48,6 +56,7 @@ func _input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	_handle_camera_input(delta)
+	_handle_combat_input()
 	
 	if use_gravity:
 		_process_gravity_movement(delta)
@@ -72,6 +81,16 @@ func _handle_camera_input(delta: float) -> void:
 	# Apply camera rotation to spring arm
 	spring_arm.rotation.y = camera_rotation.x
 	spring_arm.rotation.x = camera_rotation.y
+
+
+func _handle_combat_input() -> void:
+	if _is_dialogue_locked():
+		return
+	if not equipped_weapon:
+		return
+
+	if Input.is_action_pressed("CombatAttack"):
+		equipped_weapon.try_fire(_get_camera_aim_direction())
 
 
 func _get_movement_direction() -> Vector3:
@@ -152,6 +171,62 @@ func _update_elena_facing() -> void:
 
 func _is_dialogue_locked() -> bool:
 	return Events and Events.is_dialogue_active
+
+
+func _equip_default_weapon() -> void:
+	if not default_weapon_scene:
+		push_warning("[Navigator] No default weapon scene assigned.")
+		return
+	if not weapon_socket:
+		push_error("[Navigator] WeaponSocket not found in navigator scene.")
+		return
+
+	var inst: Node = default_weapon_scene.instantiate()
+	if not inst.has_method("try_fire"):
+		push_error("[Navigator] default_weapon_scene root must expose try_fire().")
+		return
+	if not inst is Node3D:
+		push_error("[Navigator] default_weapon_scene root must inherit Node3D.")
+		return
+
+	equipped_weapon = inst as Node3D
+	weapon_socket.add_child(equipped_weapon)
+	equipped_weapon.owner_character = self
+
+
+func _resolve_weapon_socket() -> Node3D:
+	if elena and elena.has_node("WeaponSocket"):
+		var socket: Node = elena.get_node("WeaponSocket")
+		if socket is Node3D:
+			return socket as Node3D
+
+	if has_node("WeaponSocket"):
+		var root_socket: Node = get_node("WeaponSocket")
+		if root_socket is Node3D:
+			return root_socket as Node3D
+
+	return null
+
+
+func _get_camera_aim_direction() -> Vector3:
+	var origin: Vector3 = camera.global_position
+	var forward: Vector3 = -camera.global_transform.basis.z
+	var target: Vector3 = origin + forward * aim_ray_length
+
+	var query := PhysicsRayQueryParameters3D.create(origin, target)
+	query.exclude = [self]
+	query.collide_with_areas = false
+	query.collide_with_bodies = true
+
+	var result: Dictionary = get_world_3d().direct_space_state.intersect_ray(query)
+	if not result.is_empty():
+		target = result["position"]
+
+	var muzzle_origin: Vector3 = weapon_socket.global_position if weapon_socket else global_position + Vector3(0, 1.5, 0)
+	var aim_direction: Vector3 = target - muzzle_origin
+	if aim_direction.length_squared() < 0.0001:
+		return forward
+	return aim_direction.normalized()
 
 
 ## Stub for FSE enemy melee; expand with HP if you add a combat resource to the navigator.
