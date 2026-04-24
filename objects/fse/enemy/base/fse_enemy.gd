@@ -112,12 +112,16 @@ func get_current_state_name() -> String:
 
 func take_damage(amount: int) -> void:
 	if hp <= 0:
+		print("[FseEnemy:%s] Ignored %d damage because enemy is already defeated." % [name, amount])
 		return
+	var previous_hp: int = hp
 	hp = maxi(0, hp - amount)
+	print("[FseEnemy:%s] Took %d damage. HP: %d/%d -> %d/%d" % [name, amount, previous_hp, max_hp, hp, max_hp])
 	Events.enemy_damaged.emit(amount)
 	Events.enemy_hp_changed.emit(hp, max_hp)
 	if hp <= 0 and state_machine and state_machine.has_method("switch_to"):
 		if not state_machine.is_in_state("death"):
+			print("[FseEnemy:%s] HP depleted; switching to death state." % name)
 			state_machine.switch_to("death")
 
 

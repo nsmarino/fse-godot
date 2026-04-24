@@ -8,3 +8,4 @@ class_name FseWeaponData
 @export var burst_count: int = 1
 @export var damage: float = 10.0
 @export var ammo_count: int = -1
+@export var is_automatic: bool = true

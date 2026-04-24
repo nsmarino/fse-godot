@@ -11,6 +11,7 @@ fire_rate = 0.2
 projectile_scene = ExtResource("3_player_projectile_scene")
 muzzle_velocity = 55.0
 damage = 35.0
+is_automatic = true
 metadata/_custom_type_script = "res://resources/WeaponData.gd"
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_player_blaster"]

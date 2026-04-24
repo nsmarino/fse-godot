@@ -124,7 +124,14 @@ func _handle_combat_input() -> void:
 	if not equipped_weapon:
 		return
 
-	if Input.is_action_pressed("CombatAttack"):
+	var trigger_pressed: bool = Input.is_action_pressed("CombatAttack")
+	var trigger_just_pressed: bool = Input.is_action_just_pressed("CombatAttack")
+
+	var wants_fire: bool = trigger_pressed
+	if equipped_weapon.has_method("should_fire_for_input"):
+		wants_fire = bool(equipped_weapon.call("should_fire_for_input", trigger_pressed, trigger_just_pressed))
+
+	if wants_fire:
 		equipped_weapon.try_fire(_get_camera_aim_direction())
 
 

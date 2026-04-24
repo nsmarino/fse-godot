@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://cowyb5vnlbv4i"]
 
 [ext_resource type="Script" uid="uid://c53xuce5up7n1" path="res://objects/fse/overworld/player/navigator.gd" id="1_m88ny"]
+[ext_resource type="PackedScene" path="res://objects/fse/weapons/player/PlayerRifle.tscn" id="2_0lg8p"]
 [ext_resource type="PackedScene" uid="uid://uq028cm80jk1" path="res://models/character/player/party/elena-rigged.glb" id="2_sdvag"]
 [ext_resource type="Script" uid="uid://bfnj7nkyfm24o" path="res://objects/fse/overworld/player/navigator_state_machine.gd" id="3_state_machine"]
 [ext_resource type="Script" uid="uid://33vbwc8xderj" path="res://objects/fse/overworld/player/states/idle_state.gd" id="4_idle"]
 [ext_resource type="Script" uid="uid://dw7dk77eps46f" path="res://objects/fse/overworld/player/states/locomotion_state.gd" id="5_locomotion"]
-[ext_resource type="PackedScene" path="res://objects/fse/weapons/player/PlayerBlaster.tscn" id="6_player_blaster"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tbgi4"]
 
@@ -19,7 +19,7 @@ size = Vector3(0.1, 0.2, 2)
 [node name="Navigator" type="CharacterBody3D" unique_id=1335866884 groups=["player"]]
 script = ExtResource("1_m88ny")
 move_speed = 6.75
-default_weapon_scene = ExtResource("6_player_blaster")
+default_weapon_scene = ExtResource("2_0lg8p")
 ads_camera_local_offset = Vector3(0.8, -0.5, 0)
 ads_spring_length = 3.0
 ads_fov = 30.0

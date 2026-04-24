@@ -24,6 +24,20 @@ func can_fire() -> bool:
 	return cooldown_timer.is_stopped() and data != null and data.get("projectile_scene") != null
 
 
+func should_fire_for_input(trigger_pressed: bool, trigger_just_pressed: bool) -> bool:
+	if not data:
+		return false
+
+	var is_automatic: bool = true
+	var auto_value: Variant = data.get("is_automatic")
+	if auto_value != null:
+		is_automatic = bool(auto_value)
+
+	if is_automatic:
+		return trigger_pressed
+	return trigger_just_pressed
+
+
 func try_fire(aim_direction: Vector3 = Vector3.ZERO) -> bool:
 	if not can_fire():
 		return false
