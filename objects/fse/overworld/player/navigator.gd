@@ -49,6 +49,7 @@ extends CharacterBody3D
 var camera_rotation := Vector2.ZERO  # x = yaw, y = pitch
 var pitch_limit := deg_to_rad(89.0)
 var weapon_socket: Node3D = null
+var weapon_aim_pivot: Node3D = null
 var equipped_weapon: Node3D = null
 var _pending_look_delta: Vector2 = Vector2.ZERO
 var _is_ads_active: bool = false
@@ -66,6 +67,7 @@ func _ready() -> void:
 	_hip_spring_length = spring_arm.spring_length
 	_hip_fov = camera.fov
 	weapon_socket = _resolve_weapon_socket()
+	weapon_aim_pivot = _resolve_weapon_aim_pivot()
 	_equip_default_weapon()
 
 
@@ -96,6 +98,7 @@ func _physics_process(delta: float) -> void:
 	
 	move_and_slide()
 	_update_elena_facing(delta)
+	_update_weapon_aim_pivot()
 
 
 func _handle_camera_input(delta: float) -> void:
@@ -321,6 +324,60 @@ func _get_ads_camera_target_local_position() -> Vector3:
 	return _hip_camera_local_position + offset
 
 
+func _update_weapon_aim_pivot() -> void:
+	if not weapon_aim_pivot:
+		return
+
+	var aim_direction: Vector3 = _get_camera_aim_direction() if _is_ads_active else _get_weapon_forward_direction()
+	if aim_direction.length_squared() < 0.0001:
+		return
+
+	var pivot_transform: Transform3D = weapon_aim_pivot.global_transform
+	pivot_transform.origin = _get_weapon_trail_origin(aim_direction)
+
+	if not _is_ads_active:
+		pivot_transform.basis = weapon_socket.global_transform.basis if weapon_socket else global_transform.basis
+		weapon_aim_pivot.global_transform = pivot_transform
+		return
+
+	pivot_transform.basis = Basis.looking_at(aim_direction.normalized(), Vector3.UP)
+	weapon_aim_pivot.global_transform = pivot_transform
+
+
+func _get_weapon_forward_direction() -> Vector3:
+	if equipped_weapon and equipped_weapon.has_node("Muzzle"):
+		var muzzle_node: Node = equipped_weapon.get_node("Muzzle")
+		if muzzle_node is Node3D:
+			return -muzzle_node.global_transform.basis.z
+
+	if weapon_socket:
+		return -weapon_socket.global_transform.basis.z
+
+	return -global_transform.basis.z
+
+
+func _get_weapon_muzzle_position() -> Vector3:
+	if equipped_weapon and equipped_weapon.has_node("Muzzle"):
+		var muzzle_node: Node = equipped_weapon.get_node("Muzzle")
+		if muzzle_node is Node3D:
+			return (muzzle_node as Node3D).global_position
+
+	if weapon_socket:
+		return weapon_socket.global_position
+
+	return global_position + Vector3(0, 1.5, 0)
+
+
+func _get_weapon_trail_origin(direction: Vector3) -> Vector3:
+	var offset: float = 0.0
+	if equipped_weapon:
+		var offset_value: Variant = equipped_weapon.get("muzzle_spawn_offset")
+		if offset_value != null:
+			offset = float(offset_value)
+
+	return _get_weapon_muzzle_position() + direction.normalized() * offset
+
+
 func _equip_default_weapon() -> void:
 	if not default_weapon_scene:
 		push_warning("[Navigator] No default weapon scene assigned.")
@@ -356,6 +413,15 @@ func _resolve_weapon_socket() -> Node3D:
 	return null
 
 
+func _resolve_weapon_aim_pivot() -> Node3D:
+	if weapon_socket and weapon_socket.has_node("WeaponAimPivot"):
+		var pivot: Node = weapon_socket.get_node("WeaponAimPivot")
+		if pivot is Node3D:
+			return pivot as Node3D
+
+	return null
+
+
 func _get_camera_aim_direction() -> Vector3:
 	var origin: Vector3 = camera.global_position
 	var forward: Vector3 = -camera.global_transform.basis.z
@@ -378,7 +444,7 @@ func _get_camera_aim_direction() -> Vector3:
 		# instead of an extreme far point to reduce muzzle/camera parallax drift.
 		target = origin + forward * projectile_zero_distance
 
-	var muzzle_origin: Vector3 = weapon_socket.global_position if weapon_socket else global_position + Vector3(0, 1.5, 0)
+	var muzzle_origin: Vector3 = _get_weapon_muzzle_position()
 	if muzzle_origin.distance_to(target) < min_muzzle_target_distance:
 		target = muzzle_origin + forward * min_muzzle_target_distance
 
