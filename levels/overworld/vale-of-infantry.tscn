@@ -10,45 +10,10 @@ polygons = [PackedInt32Array(2, 1, 4), PackedInt32Array(4, 1, 0), PackedInt32Arr
 
 [node name="Overworld" unique_id=1089087201 instance=ExtResource("1_xdlbg")]
 
-[node name="OmniLight3D" type="OmniLight3D" parent="Lighting" parent_id_path=PackedInt32Array(1431339747) index="0" unique_id=2016700953]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -7.5)
-omni_range = 20.0
-omni_attenuation = 0.091
-
-[node name="OmniLight3D2" type="OmniLight3D" parent="Lighting" parent_id_path=PackedInt32Array(1431339747) index="1" unique_id=731655883]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -37.5)
-omni_range = 20.0
-omni_attenuation = 0.091
-
-[node name="OmniLight3D3" type="OmniLight3D" parent="Lighting" parent_id_path=PackedInt32Array(1431339747) index="2" unique_id=142848105]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -112)
-omni_range = 20.0
-omni_attenuation = 0.091
-
-[node name="OmniLight3D4" type="OmniLight3D" parent="Lighting" parent_id_path=PackedInt32Array(1431339747) index="3" unique_id=96389776]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -145)
-omni_range = 20.0
-omni_attenuation = 0.091
-
-[node name="OmniLight3D5" type="OmniLight3D" parent="Lighting" parent_id_path=PackedInt32Array(1431339747) index="4" unique_id=1746513462]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78, 2.5, -122.5)
-omni_range = 20.0
-omni_attenuation = 0.091
-
-[node name="OmniLight3D6" type="OmniLight3D" parent="Lighting" parent_id_path=PackedInt32Array(1431339747) index="5" unique_id=1200221416]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -61.5, 2.5, -14.5)
-omni_range = 20.0
-omni_attenuation = 0.091
-
-[node name="OmniLight3D7" type="OmniLight3D" parent="Lighting" parent_id_path=PackedInt32Array(1431339747) index="6" unique_id=1520868335]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -113, 2.5, -61)
-omni_range = 20.0
-omni_attenuation = 0.091
-
 [node name="NavigationRegion3D" parent="." index="1" unique_id=691560456]
 navigation_mesh = SubResource("NavigationMesh_bergp")
 
 [node name="FseEnemy" parent="NavigationRegion3D/Enemies" parent_id_path=PackedInt32Array(206968709) index="0" unique_id=1489081750 instance=ExtResource("2_3hjm8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.9005995, 0, 0)
 
-[node name="simpleBlendFile" parent="NavigationRegion3D/Ground" parent_id_path=PackedInt32Array(865474664) index="0" unique_id=1610385795 instance=ExtResource("2_bergp")]
+[node name="PaintedHallway" parent="NavigationRegion3D/Ground" parent_id_path=PackedInt32Array(865474664) index="0" unique_id=1676717657 instance=ExtResource("2_bergp")]
