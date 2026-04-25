@@ -8,6 +8,8 @@ signal died
 @onready var state_machine: Node = $StateMachine
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var attack_area: Area3D = $AttackArea
+@onready var damage_sfx: AudioStreamPlayer3D = get_node_or_null("SFX/Damage") as AudioStreamPlayer3D
+@onready var death_sfx: AudioStreamPlayer3D = get_node_or_null("SFX/Death") as AudioStreamPlayer3D
 
 var spawn_point: Vector3
 var character_instance: Node3D
@@ -117,11 +119,13 @@ func take_damage(amount: int) -> void:
 	var previous_hp: int = hp
 	hp = maxi(0, hp - amount)
 	print("[FseEnemy:%s] Took %d damage. HP: %d/%d -> %d/%d" % [name, amount, previous_hp, max_hp, hp, max_hp])
+	_play_sfx(damage_sfx)
 	Events.enemy_damaged.emit(amount)
 	Events.enemy_hp_changed.emit(hp, max_hp)
 	if hp <= 0 and state_machine and state_machine.has_method("switch_to"):
 		if not state_machine.is_in_state("death"):
 			print("[FseEnemy:%s] HP depleted; switching to death state." % name)
+			_play_sfx(death_sfx)
 			state_machine.switch_to("death")
 
 
@@ -143,6 +147,14 @@ func is_defeated() -> bool:
 
 func notify_died() -> void:
 	died.emit()
+
+
+func _play_sfx(player: AudioStreamPlayer3D) -> void:
+	if not player:
+		return
+
+	player.stop()
+	player.play()
 
 
 ## Instantiate up to [param count] enemies at shuffled [Marker3D] children under [param markers_root].

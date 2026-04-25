@@ -40,11 +40,26 @@ extends CharacterBody3D
 @export var ads_elena_turn_lerp: float = 0.2
 @export var hip_elena_reset_lerp: float = 0.15
 
+@export_category("Dodge / Sprint")
+@export var dodge_impulse_strength: float = 18.0
+@export var ads_dodge_impulse_strength: float = 12.0
+@export var dodge_duration: float = 0.18
+@export var dodge_cooldown: float = 0.35
+@export var sprint_move_speed_multiplier: float = 1.6
+@export var sprint_spring_length_bonus: float = 0.75
+@export var sprint_camera_lerp_speed: float = 8.0
+@export var dodge_sfx_pitch_scale: float = 0.82
+
 # Camera spring arm - add as child of this CharacterBody3D
 @onready var spring_arm: SpringArm3D = $SpringArm3D
 @onready var camera_rig: Node3D = $SpringArm3D/CameraRig
 @onready var camera: Camera3D = $SpringArm3D/CameraRig/Camera3D
 @onready var elena: Node3D = $elena  # Player model - faces camera when moving
+@onready var jump_sfx: AudioStreamPlayer3D = get_node_or_null("SFX/Jump") as AudioStreamPlayer3D
+@onready var land_sfx: AudioStreamPlayer3D = get_node_or_null("SFX/Land") as AudioStreamPlayer3D
+@onready var enter_aim_sfx: AudioStreamPlayer3D = get_node_or_null("SFX/EnterAim") as AudioStreamPlayer3D
+@onready var dodge_sfx: AudioStreamPlayer3D = get_node_or_null("SFX/Dodge") as AudioStreamPlayer3D
+@onready var dodge_burst: GPUParticles3D = get_node_or_null("DodgeBurst") as GPUParticles3D
 
 var camera_rotation := Vector2.ZERO  # x = yaw, y = pitch
 var pitch_limit := deg_to_rad(89.0)
@@ -58,6 +73,12 @@ var _hip_camera_local_position: Vector3 = Vector3.ZERO
 var _hip_spring_length: float = 0.0
 var _hip_fov: float = 0.0
 var _needs_elena_hip_reset: bool = false
+var _has_floor_state: bool = false
+var _was_on_floor: bool = false
+var _dodge_timer: float = 0.0
+var _dodge_cooldown_timer: float = 0.0
+var _dodge_velocity: Vector3 = Vector3.ZERO
+var _preserve_facing_during_dodge: bool = false
 
 
 func _ready() -> void:
@@ -87,6 +108,8 @@ func _input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	_update_ads_state()
+	_update_dodge_cooldown(delta)
+	_handle_sprint_input()
 	_handle_camera_input(delta)
 	_update_ads_camera(delta)
 	_handle_combat_input()
@@ -97,6 +120,8 @@ func _physics_process(delta: float) -> void:
 		_process_fly_movement(delta)
 	
 	move_and_slide()
+	_update_dodge(delta)
+	_update_landing_sfx()
 	_update_elena_facing(delta)
 	_update_weapon_aim_pivot()
 
@@ -138,6 +163,87 @@ func _handle_combat_input() -> void:
 		equipped_weapon.try_fire(_get_camera_aim_direction())
 
 
+func _handle_sprint_input() -> void:
+	if _is_dialogue_locked():
+		return
+	if not Input.is_action_just_pressed("Sprint"):
+		return
+	if not is_on_floor():
+		return
+	if _dodge_cooldown_timer > 0.0:
+		return
+
+	_start_dodge()
+
+
+func _start_dodge() -> void:
+	var movement_direction: Vector3 = _get_movement_direction()
+	movement_direction.y = 0.0
+	_preserve_facing_during_dodge = movement_direction.length_squared() <= 0.0001
+
+	var direction: Vector3 = _get_dodge_direction(movement_direction)
+	if direction.length_squared() < 0.0001:
+		return
+
+	var impulse_strength: float = ads_dodge_impulse_strength if _is_ads_active else dodge_impulse_strength
+	_dodge_velocity = direction.normalized() * impulse_strength
+	_dodge_timer = dodge_duration
+	_dodge_cooldown_timer = dodge_cooldown
+	velocity.x = _dodge_velocity.x
+	velocity.z = _dodge_velocity.z
+	_play_sfx(dodge_sfx, dodge_sfx_pitch_scale)
+	_emit_dodge_burst(direction)
+
+
+func _get_dodge_direction(move_dir: Vector3 = Vector3.ZERO) -> Vector3:
+	move_dir.y = 0.0
+	if move_dir.length_squared() > 0.0001:
+		return move_dir.normalized()
+
+	var backward: Vector3 = camera.global_transform.basis.z
+	backward.y = 0.0
+	if backward.length_squared() > 0.0001:
+		return backward.normalized()
+
+	return -global_transform.basis.z
+
+
+func _emit_dodge_burst(dodge_direction: Vector3) -> void:
+	if not dodge_burst:
+		return
+
+	var emit_direction: Vector3 = -dodge_direction.normalized()
+	dodge_burst.global_transform = Transform3D(
+		Basis.looking_at(emit_direction, Vector3.UP),
+		global_position + Vector3(0.0, 0.2, 0.0)
+	)
+	dodge_burst.visible = true
+	dodge_burst.emitting = false
+	dodge_burst.restart()
+	dodge_burst.emitting = true
+
+
+func _update_dodge(delta: float) -> void:
+	if _dodge_timer <= 0.0:
+		return
+
+	_dodge_timer = maxf(_dodge_timer - delta, 0.0)
+	if _dodge_timer <= 0.0:
+		_dodge_velocity = Vector3.ZERO
+		_preserve_facing_during_dodge = false
+
+
+func _is_dodging() -> bool:
+	return _dodge_timer > 0.0
+
+
+func _update_dodge_cooldown(delta: float) -> void:
+	if _dodge_cooldown_timer <= 0.0:
+		return
+
+	_dodge_cooldown_timer = maxf(_dodge_cooldown_timer - delta, 0.0)
+
+
 func _get_movement_direction() -> Vector3:
 	if _is_dialogue_locked():
 		return Vector3.ZERO
@@ -173,8 +279,12 @@ func _process_fly_movement(_delta: float) -> void:
 	var vertical_input := 0.0 if _is_dialogue_locked() else Input.get_axis("FlyDown", "FlyUp")
 	var current_move_speed: float = _get_current_move_speed()
 	
-	velocity.x = move_dir.x * current_move_speed
-	velocity.z = move_dir.z * current_move_speed
+	if _is_dodging():
+		velocity.x = _dodge_velocity.x
+		velocity.z = _dodge_velocity.z
+	else:
+		velocity.x = move_dir.x * current_move_speed
+		velocity.z = move_dir.z * current_move_speed
 	velocity.y = vertical_input * vertical_speed
 
 
@@ -193,17 +303,43 @@ func _process_gravity_movement(delta: float) -> void:
 		wants_jump = Input.is_action_just_pressed("FlyUp") or Input.is_action_just_pressed("Jump")
 	if wants_jump and on_floor:
 		velocity.y = jump_velocity
+		_play_sfx(jump_sfx)
 	
 	# Horizontal movement (reduced control in air)
 	var control := 1.0 if on_floor else air_control
 	var target_velocity_x := move_dir.x * current_move_speed
 	var target_velocity_z := move_dir.z * current_move_speed
 	
-	velocity.x = lerp(velocity.x, target_velocity_x, control)
-	velocity.z = lerp(velocity.z, target_velocity_z, control)
+	if _is_dodging():
+		velocity.x = _dodge_velocity.x
+		velocity.z = _dodge_velocity.z
+	else:
+		velocity.x = lerp(velocity.x, target_velocity_x, control)
+		velocity.z = lerp(velocity.z, target_velocity_z, control)
+
+
+func _update_landing_sfx() -> void:
+	var on_floor: bool = is_on_floor()
+	if use_gravity and _has_floor_state and not _was_on_floor and on_floor:
+		_play_sfx(land_sfx)
+
+	_was_on_floor = on_floor
+	_has_floor_state = true
+
+
+func _play_sfx(player: AudioStreamPlayer3D, pitch_scale: float = 1.0) -> void:
+	if not player:
+		return
+
+	player.stop()
+	player.pitch_scale = pitch_scale
+	player.play()
 
 
 func _update_elena_facing(_delta: float) -> void:
+	if _is_dodging() and _preserve_facing_during_dodge:
+		return
+
 	if _is_ads_active:
 		var aim_dir: Vector3 = -camera.global_transform.basis.z
 		aim_dir.y = 0.0
@@ -240,7 +376,19 @@ func _is_dialogue_locked() -> bool:
 func _get_current_move_speed() -> float:
 	if _is_ads_active:
 		return move_speed * ads_move_speed_multiplier
+	if _is_sprinting():
+		return move_speed * sprint_move_speed_multiplier
 	return move_speed
+
+
+func _is_sprinting() -> bool:
+	if _is_dialogue_locked():
+		return false
+	if _is_ads_active:
+		return false
+	if _is_dodging():
+		return false
+	return is_on_floor() and Input.is_action_pressed("Sprint")
 
 
 func _update_ads_state() -> void:
@@ -256,6 +404,7 @@ func _update_ads_state() -> void:
 
 
 func _enter_ads_mode() -> void:
+	_play_sfx(enter_aim_sfx)
 	# Fold current spring-arm yaw into the character so ADS starts centered.
 	rotation.y += spring_arm.rotation.y
 	camera_rotation.x = 0.0
@@ -264,6 +413,7 @@ func _enter_ads_mode() -> void:
 
 
 func _exit_ads_mode() -> void:
+	_play_sfx(enter_aim_sfx, 1.08)
 	camera_rotation.x = _camera_yaw_offset
 	_camera_yaw_offset = 0.0
 	camera_rotation.y = clamp(camera_rotation.y, -pitch_limit, pitch_limit)
@@ -272,13 +422,23 @@ func _exit_ads_mode() -> void:
 
 func _update_ads_camera(delta: float) -> void:
 	var target: Vector3 = _get_ads_camera_target_local_position() if _is_ads_active else _hip_camera_local_position
-	var target_spring_length: float = ads_spring_length if _is_ads_active else _hip_spring_length
+	var target_spring_length: float = _get_target_spring_length()
 	var target_fov: float = ads_fov if _is_ads_active else _hip_fov
 	var t: float = clampf(ads_transition_speed * delta, 0.0, 1.0)
+	var spring_lerp_speed: float = ads_transition_speed if _is_ads_active else sprint_camera_lerp_speed
+	var spring_t: float = clampf(spring_lerp_speed * delta, 0.0, 1.0)
 	var fov_t: float = clampf(ads_fov_lerp_speed * delta, 0.0, 1.0)
 	camera.position = camera.position.lerp(target, t)
-	spring_arm.spring_length = lerpf(spring_arm.spring_length, target_spring_length, t)
+	spring_arm.spring_length = lerpf(spring_arm.spring_length, target_spring_length, spring_t)
 	camera.fov = lerpf(camera.fov, target_fov, fov_t)
+
+
+func _get_target_spring_length() -> float:
+	if _is_ads_active:
+		return ads_spring_length
+	if _is_sprinting():
+		return _hip_spring_length + sprint_spring_length_bonus
+	return _hip_spring_length
 
 
 func _apply_hip_look(look_delta: Vector2) -> void:

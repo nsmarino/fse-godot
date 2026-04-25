@@ -17,6 +17,7 @@ func can_fire() -> bool:
 
 func try_fire(aim_direction: Vector3 = Vector3.ZERO) -> bool:
 	if not can_fire():
+		_play_blocked_fire_attempt_sfx()
 		return false
 
 	if ammo_count == 0:
@@ -49,6 +50,7 @@ func try_fire(aim_direction: Vector3 = Vector3.ZERO) -> bool:
 		_log_hitscan_miss(_shot_counter, origin, end_point, direction)
 
 	_spawn_trail(origin, end_point)
+	_play_shoot_sfx()
 	cooldown_timer.start(maxf(float(data.get("fire_rate")), 0.01))
 	return true
 

@@ -6,6 +6,9 @@ class_name FseBaseWeapon
 
 @onready var muzzle: Marker3D = $Muzzle
 @onready var cooldown_timer: Timer = $CooldownTimer
+@onready var shoot_sfx: AudioStreamPlayer3D = get_node_or_null("SFX/Shoot") as AudioStreamPlayer3D
+@onready var attempt_shot_sfx: AudioStreamPlayer3D = get_node_or_null("SFX/AttemptShot") as AudioStreamPlayer3D
+@onready var ready_sfx: AudioStreamPlayer3D = get_node_or_null("SFX/Ready") as AudioStreamPlayer3D
 
 var ammo_count: int = -1
 var owner_character: CharacterBody3D = null
@@ -18,6 +21,8 @@ func _ready() -> void:
 		push_warning("[FseBaseWeapon:%s] Missing weapon data." % name)
 	cooldown_timer.one_shot = true
 	cooldown_timer.stop()
+	if not cooldown_timer.timeout.is_connected(_on_cooldown_timer_timeout):
+		cooldown_timer.timeout.connect(_on_cooldown_timer_timeout)
 
 
 func can_fire() -> bool:
@@ -40,6 +45,7 @@ func should_fire_for_input(trigger_pressed: bool, trigger_just_pressed: bool) ->
 
 func try_fire(aim_direction: Vector3 = Vector3.ZERO) -> bool:
 	if not can_fire():
+		_play_blocked_fire_attempt_sfx()
 		return false
 
 	if ammo_count == 0:
@@ -49,8 +55,41 @@ func try_fire(aim_direction: Vector3 = Vector3.ZERO) -> bool:
 		ammo_count -= 1
 
 	_spawn_projectiles(aim_direction)
+	_play_shoot_sfx()
 	cooldown_timer.start(maxf(float(data.get("fire_rate")), 0.01))
 	return true
+
+
+func _play_shoot_sfx() -> void:
+	_play_sfx(shoot_sfx)
+
+
+func _play_blocked_fire_attempt_sfx() -> void:
+	if cooldown_timer.is_stopped():
+		return
+
+	_play_sfx(attempt_shot_sfx)
+
+
+func _play_ready_sfx() -> void:
+	if ammo_count == 0:
+		return
+	if not can_fire():
+		return
+
+	_play_sfx(ready_sfx)
+
+
+func _play_sfx(player: AudioStreamPlayer3D) -> void:
+	if not player:
+		return
+
+	player.stop()
+	player.play()
+
+
+func _on_cooldown_timer_timeout() -> void:
+	_play_ready_sfx()
 
 
 func _spawn_projectiles(aim_direction: Vector3) -> void:

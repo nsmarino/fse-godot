@@ -8,3 +8,9 @@ enemy_data = ExtResource("2_yu7rg")
 
 [node name="NavigationAgent3D" parent="." index="1" unique_id=2043099844]
 avoidance_enabled = false
+
+[node name="Damage" parent="SFX" parent_id_path=PackedInt32Array(971357877) index="0" unique_id=1842925870]
+volume_db = 80.0
+
+[node name="Death" parent="SFX" parent_id_path=PackedInt32Array(971357877) index="1" unique_id=1225058900]
+volume_db = 20.0

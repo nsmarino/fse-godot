@@ -6,10 +6,33 @@
 [ext_resource type="Script" uid="uid://bfnj7nkyfm24o" path="res://objects/fse/overworld/player/navigator_state_machine.gd" id="3_state_machine"]
 [ext_resource type="Script" uid="uid://33vbwc8xderj" path="res://objects/fse/overworld/player/states/idle_state.gd" id="4_idle"]
 [ext_resource type="Script" uid="uid://dw7dk77eps46f" path="res://objects/fse/overworld/player/states/locomotion_state.gd" id="5_locomotion"]
+[ext_resource type="AudioStream" uid="uid://gs13hpg6x7c0" path="res://sounds/robot_jump.wav" id="6_jump_sfx"]
+[ext_resource type="AudioStream" uid="uid://c52um5ycfub4w" path="res://sounds/robot_land.wav" id="7_land_sfx"]
+[ext_resource type="AudioStream" uid="uid://bcmibcwusegaf" path="res://sounds/clothing-rustle.wav" id="9_e0ass"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tbgi4"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_tefeu"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dodge_burst"]
+direction = Vector3(0, 0, -1)
+spread = 35.0
+initial_velocity_min = 5.0
+initial_velocity_max = 8.0
+gravity = Vector3(0, -2, 0)
+scale_min = 0.8
+scale_max = 1.4
+color = Color(0.9, 0.82, 0.62, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dodge_burst"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.9, 0.82, 0.62, 0.9)
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_dodge_burst"]
+material = SubResource("StandardMaterial3D_dodge_burst")
+size = Vector2(0.18, 0.18)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_m88ny"]
 
@@ -51,6 +74,8 @@ default_weapon_scene = ExtResource("2_0lg8p")
 ads_camera_local_offset = Vector3(0.8, -0.5, 0)
 ads_spring_length = 3.0
 ads_fov = 30.0
+dodge_impulse_strength = 20.0
+sprint_spring_length_bonus = 2.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1222655305]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -60,6 +85,17 @@ shape = SubResource("CapsuleShape3D_tbgi4")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 visible = false
 mesh = SubResource("CapsuleMesh_tefeu")
+
+[node name="DodgeBurst" type="GPUParticles3D" parent="." unique_id=903847511]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+emitting = false
+amount = 36
+lifetime = 0.45
+one_shot = true
+explosiveness = 1.0
+visibility_aabb = AABB(-4, -2, -4, 8, 4, 8)
+process_material = SubResource("ParticleProcessMaterial_dodge_burst")
+draw_pass_1 = SubResource("QuadMesh_dodge_burst")
 
 [node name="SpringArm3D" type="SpringArm3D" parent="." unique_id=848395057]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0008976, 0)
@@ -155,5 +191,19 @@ state_name = "idle"
 [node name="Locomotion" type="Node" parent="StateMachine" unique_id=1261270721]
 script = ExtResource("5_locomotion")
 state_name = "locomotion"
+
+[node name="SFX" type="Node3D" parent="." unique_id=1630393647]
+
+[node name="Jump" type="AudioStreamPlayer3D" parent="SFX" unique_id=255739143]
+stream = ExtResource("6_jump_sfx")
+
+[node name="Land" type="AudioStreamPlayer3D" parent="SFX" unique_id=789603421]
+stream = ExtResource("7_land_sfx")
+
+[node name="EnterAim" type="AudioStreamPlayer3D" parent="SFX" unique_id=1873098794]
+stream = ExtResource("9_e0ass")
+
+[node name="Dodge" type="AudioStreamPlayer3D" parent="SFX" unique_id=446102398]
+stream = ExtResource("9_e0ass")
 
 [editable path="elena"]

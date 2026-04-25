@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://dybuamxqqnxgx" path="res://objects/fse/enemy/base/states/pursue.gd" id="5_pursue"]
 [ext_resource type="Script" uid="uid://bpde0e5tnoswn" path="res://objects/fse/enemy/base/states/attack.gd" id="6_attack"]
 [ext_resource type="Script" uid="uid://segvw73ki1oa" path="res://objects/fse/enemy/base/states/death.gd" id="7_death"]
+[ext_resource type="AudioStream" uid="uid://5cm2xw8assov" path="res://sounds/hard-splash.wav" id="8_damage_sfx"]
+[ext_resource type="AudioStream" uid="uid://ct1sv14b1hb2v" path="res://sounds/doom-sound-fx-secret.wav" id="9_death_sfx"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_collider"]
 
@@ -62,3 +64,11 @@ state_name = "death"
 [node name="Marker3D" type="Marker3D" parent="." unique_id=95766855]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 gizmo_extents = 3.0
+
+[node name="SFX" type="Node3D" parent="." unique_id=971357877]
+
+[node name="Damage" type="AudioStreamPlayer3D" parent="SFX" unique_id=1842925870]
+stream = ExtResource("8_damage_sfx")
+
+[node name="Death" type="AudioStreamPlayer3D" parent="SFX" unique_id=1225058900]
+stream = ExtResource("9_death_sfx")
