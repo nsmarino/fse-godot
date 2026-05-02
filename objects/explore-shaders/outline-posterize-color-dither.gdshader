@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded;
+render_mode unshaded, fog_disabled;
 
 uniform sampler2D DEPTH_TEXTURE : source_color, hint_depth_texture, filter_linear_mipmap;
 uniform sampler2D NORMAL_TEXTURE : hint_normal_roughness_texture, filter_nearest;
@@ -13,7 +13,7 @@ uniform vec3 outline_color : source_color = vec3(0.0,0.0,0.0);
 uniform float outline_thickness = 10.0;
 
 uniform bool enable_color_limit = true;
-uniform int color_levels : hint_range(2, 32) = 8;
+uniform int color_levels : hint_range(2, 48) = 8;
 
 uniform bool enable_color_palette = true;
 uniform vec4 color1  : source_color  = vec4(1.0,0.925,0.839,1.0);			//#bfbfbf - avg = 0.749
